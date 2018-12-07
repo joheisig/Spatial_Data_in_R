@@ -141,3 +141,12 @@
   CorrectAnswer: mt_rainier_2000[mt_rainier_2000 < 2000] <- NA
   AnswerTests: omnitest(correctExpr='mt_rainier_2000[mt_rainier_2000 < 2000] <- NA')
   Hint: Select the lower elevations and assign NA's with this line - 'mt_rainier_2000[mt_rainier_2000 < 2000] <- NA'
+
+- Class: cmd_question
+  Output: Plot the manipulated raster to see what changed.
+  CorrectAnswer: plot(mt_rainier_2000)
+  AnswerTests: omnitest(correctExpr='plot(mt_rainier_2000)')
+  Hint: Plot the modified raster with 'plot(mt_rainier_2000)'.
+
+- Class: text
+  Output: As you can see, the extent of the raster stayed the same. This means no cells were deleted, but they are now occupied with NA-values. By default R displays them in white.
