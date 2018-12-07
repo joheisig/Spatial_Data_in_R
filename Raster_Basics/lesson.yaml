@@ -41,7 +41,7 @@
   Hint: It is important to keep the right order of arguments - cellStats(mt_rainier, range)
 
 - Class: text
-  Output: Besides the range you could also query minimum (min), maximum (max), mean (mean), standard deviation (sd) and many more.
+  Output: Besides the range you could also query minimum (min), maximum (max), mean (mean), standard deviation (sd) and many more. If you want test some more options, use 'play()' to pause SWIRL and 'nxt()' when your done exploring.
 
 - Class: cmd_question
   Output: Next we want to explore the dimensions of our data set. A raster has a number of both rows and columns. The product of the two is the total number of cells. Check how many rows the raster has with 'nrow(mt_rainier)'.
