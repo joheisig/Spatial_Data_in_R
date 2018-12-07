@@ -1,0 +1,143 @@
+- Class: meta
+  Course: Spatial_Data_in_R
+  Lesson: Raster_Basics
+  Author: Johannes Heisig
+  Type: Standard
+  Organization: UN-SPIDER / University of Bayreuth
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to this SWIRL course on Spatial Data in R.
+
+- Class: text
+  Output: In the following lessons you will learn how to import, process and analyze spatial data within the R programming language.
+
+- Class: mult_question
+  Output: As you might know, spatial data usually comes as raster or vector data. Which of the two formats uses pixel cells to display information?
+  AnswerChoices: raster;vector;both
+  CorrectAnswer: raster
+  AnswerTests: omnitest(correctVal='raster')
+  Hint: Pixel cells are also called raster cells!
+
+- Class: text
+  Output: R is able to read in a variety of raster data file formats. Regardless of the original format, R creates an internal 'raster-object' from it. This allows for compatibility of different inputs.
+
+- Class: cmd_question
+  Output: We loaded a raster data set in the background for you to explore. It contains elevation data from around Mount Rainier (units are meters). Type 'plot(mt_rainier)' to see what it looks like.
+  CorrectAnswer: plot(mt_rainier)
+  AnswerTests: omnitest(correctExpr='plot(mt_rainier)')
+  Hint: Just type 'plot(mt_rainier)' and hit ENTER.
+
+- Class: text
+  Output: The plot already gives us an idea about the location of our dataset as x- and y-axes are labled with geographic coordinates. It also suggests, that values range from below 1000m and above 4000m, which seems reasonable for mountainous regions.
+
+- Class: text
+  Output: Let's view some more specific metadata. The 'cellStats()'-function is great for getting basic statistics on the entire data set. First we are interested in the value range (minimum and maximum) of our elevation data.
+
+- Class: cmd_question
+  Output: Type 'cellStats(mt_rainier, range)' to see highest and lowest elevation values. 
+  CorrectAnswer: cellStats(mt_rainier, range)
+  AnswerTests: omnitest(correctExpr='cellStats(mt_rainier, range)')
+  Hint: It is important to keep the right order of arguments - cellStats(mt_rainier, range)
+
+- Class: text
+  Output: Besides the range you could also query minimum (min), maximum (max), mean (mean), standard deviation (sd) and many more.
+
+- Class: cmd_question
+  Output: Next we want to explore the dimensions of our data set. A raster has a number of both rows and columns. The product of the two is the total number of cells. Check how many rows the raster has with 'nrow(mt_rainier)'.
+  CorrectAnswer: nrow(mt_rainier)
+  AnswerTests: omnitest(correctExpr='nrow(mt_rainier)')
+  Hint: Just type 'nrow(mt_rainier)'.
+
+- Class: cmd_question
+  Output: Now do the same with the ncol()-function.
+  CorrectAnswer: ncol(mt_rainier)
+  AnswerTests: omnitest(correctExpr='ncol(mt_rainier)')
+  Hint: Use 'ncol(mt_rainier)' to get the number of columns.
+
+- Class: cmd_question
+  Output: Finally try the ncell()-function in the same manner. You could also multiply the two numbers by hand or by using the two functions from above --> ncell(x) = nrow(x) * ncol(x) = 2159 * 1799.
+  CorrectAnswer: 3884041
+  AnswerTests: omnitest(correctVal='3884041')
+  Hint: Use 'ncell(mt_rainier)' to get the number of cells.
+
+- Class: cmd_question
+  Output: We now know that our data set consists of almost 4 million cells with idividual values. That's quite a lot! This must mean the spatial resolution is pretty high. Get a more specific answer with the 'res()'-function.
+  CorrectAnswer: res(mt_rainier)
+  AnswerTests: omnitest(correctExpr='res(mt_rainier)')
+  Hint: Use 'res(mt_rainier)' to get the length of one raster cell.
+
+- Class: text
+  Output: The unit of this resolution value is degrees. 0.0002777778 degrees is one arc second or 1/3600 degrees. The equivalent of one degree in meters can vary depending on the latitude. A longitudinal degree for example is longest at the equator and gets shorter with proximity to the poles. We will cover more details in a later lesson on Coordinate Reference Systems. For latitudes in our data set (~46.7), 0.00027777778 degrees correspond to approximately 30m in latitude and 21m in longitude.
+
+- Class: text
+  Output: Judging from the axes values of our plot on the right the data set must be located somewhere in western North America.
+
+- Class: cmd_question
+  Output: However, let's find out about the exact spatial extent of the raster. Use the extent()-command with the mt_rainier dataset as an argument.
+  CorrectAnswer: extent(mt_rainier)
+  AnswerTests: omnitest(correctExpr='extent(mt_rainier)')
+  Hint: Be careful to spell extent with a 't' in the end, not a 'd'. Type 'extent(mt_rainier)'.
+
+- Class: text
+  Output: We can observe, that our dataset is about half a degree wide in both latitude and longitude.
+
+- Class: cmd_question
+  Output: Now we already know quite a bit about our data. Getting this kind of overview before starting to work with the data set is good practice. We will now display the same metadata again, but this time with a little shortcut. Just type the name of the raster and hit ENTER.
+  CorrectAnswer: mt_rainier
+  AnswerTests: omnitest(correctExpr='mt_rainier')
+  Hint: Execute 'mt_rainier'.
+
+- Class: text
+  Output: Pretty handy, right? But why did we go through all that metadata step-by-step? Because now you know how to access these single bits of information easily. Later you might want to print only the resolution in a plot heading or use the extent information to manipulate your data.
+
+- Class: text
+  Output: Earlier we realized that our dataset is quite large and we are only interested in Mount Rainier. So let's reduce the data set a little. For this we should specify a smaller extent first.
+
+- Class: cmd_question
+  Output: Use the 'drawExtent()'-function and select your area of interest by hand, for example the mountain itself. Store this extent in a variable called 'ex'. After executing drawExtent(), click on the plot twice for two diagonal corners of a rectangle. NOTE! Due to its internal structure SWIRL executes all your commands twice. Normally you don't notice, but drawExtent() will act funny. You will have to draw your rectangle twice, while the first one will be stored. Don't worry, consider it additional practice ;)
+  CorrectAnswer: e <- drawExtent()
+  AnswerTests: expr_uses_func('drawExtent')
+  Hint: Type ex <- drawExtent(), execute and click on the plot twice - lower left and upper right corner.
+
+- Class: cmd_question
+  Output: To reduce the data we can now crop to our new extent. The crop()-function takes in a raster and an extent-object. Try cropping your dataset in the following manner. mt_rainier_crop <- crop(mt_rainier, 'extent-object') 
+  CorrectAnswer: mt_rainier_crop <- crop(mt_rainier, ex)
+  AnswerTests: expr_uses_func('crop')
+  Hint: Try e.g. mt_rainier_crop <- crop(mt_rainier, ex) if your extent from earlier is called ex.
+
+- Class: cmd_question
+  Output: To see the result plot the cropped raster with the plot()-function.
+  CorrectAnswer: plot(mt_rainier_crop)
+  AnswerTests: omnitest(correctExpr='plot(mt_rainier_crop)')
+  Hint: Use plot(mt_rainier_crop) to view the result.
+
+- Class: text
+  Output: Did you just realize R plotted your cropped image a little faster than the original one? Reducing data to the necessary extent saves you computation time. This might get more important when your calculations on the raster get more complex.
+
+- Class: text
+  Output: We learned earlier, that each raster cell contains an elevation value. R stores these values in a long vector and assigns them to cells from left to right, starting in the top left corner of the image. We could display all these values by using the 'values()'-function. In our case however, this would print hundreds of thousands of numbers and R would politely stop when the 'max.print'-limit is reached.
+
+- Class: text
+  Output: To see the first few example values though, we can wrap 'values()' in the 'head()'-function. If you are not familiar with 'head()' - it selects a "header", so the first few items of a vector or table. By default it selects the first 6.
+
+- Class: cmd_question
+  Output: Try using 'head()' and place 'values(mt_rainier_crop)' in it as an argument.
+  CorrectAnswer: head(values(mt_rainier_crop))
+  AnswerTests: omnitest(correctExpr='head(values(mt_rainier_crop))')
+  Hint: Wrap 'head()' around the 'values()' like this - 'head(values(mt_rainier_crop))'
+
+- Class: text
+  Output: In R we can easily mask parts of the value range of our raster. Let's say we are only interested in areas above 2000 meters. 
+
+- Class: cmd_question
+  Output: Before we manipulate the data, assign the cropped image to a new variable called 'mt_rainier_2000'. This is like copying a file for backup reasons. 
+  CorrectAnswer: mt_rainier_2000 <- mt_rainier_crop
+  AnswerTests: omnitest(correctExpr='mt_rainier_2000 <- mt_rainier_crop')
+  Hint: Just reassign the cropped data set like this - mt_rainier_2000 <- mt_rainier_crop
+
+- Class: cmd_question
+  Output: Now we will use [square brackets] to index elevations below 2000 meters, like this - 'mt_rainier_2000[mt_rainier_2000 < 2000]'. The expression reads like follows. "Select values of mt_rainier_2000, at locations where values of mt_rainier_2000 are smaller than the threshold 2000." Finally assign NA to the selected values.
+  CorrectAnswer: mt_rainier_2000[mt_rainier_2000 < 2000] <- NA
+  AnswerTests: omnitest(correctExpr='mt_rainier_2000[mt_rainier_2000 < 2000] <- NA')
+  Hint: Select the lower elevations and assign NA's with this line - 'mt_rainier_2000[mt_rainier_2000 < 2000] <- NA'
