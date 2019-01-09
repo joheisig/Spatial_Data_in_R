@@ -20,7 +20,7 @@
   Hint: Pixel cells are also called raster cells!
 
 - Class: text
-  Output: R is able to read in a variety of raster data file formats. Regardless of the original format, R creates an internal 'raster-object' from it. This allows for compatibility of different inputs.
+  Output: Correct! In this lesson we will focus on raster data exclusively. R is able to read in a variety of raster data file formats. Regardless of the original format, R creates an internal 'raster-object' from it. This allows for compatibility of different inputs.
 
 - Class: cmd_question
   Output: We loaded a raster data set in the background for you to explore. It contains elevation data from around Mount Rainier (units are meters). Type 'plot(mt_rainier)' to see what it looks like.
@@ -29,7 +29,7 @@
   Hint: Just type 'plot(mt_rainier)' and hit ENTER.
 
 - Class: text
-  Output: The plot already gives us an idea about the location of our dataset as x- and y-axes are labled with geographic coordinates. It also suggests, that values range from below 1000m and above 4000m, which seems reasonable for mountainous regions.
+  Output: The plot already gives us an idea about the location of our dataset as x- and y-axes are labled with geographic coordinates. It also suggests, that values range from below 1000m to above 4000m, which seems reasonable for mountainous regions.
 
 - Class: text
   Output: Let's view some more specific metadata. The 'cellStats()'-function is great for getting basic statistics on the entire data set. First we are interested in the value range (minimum and maximum) of our elevation data.
@@ -68,7 +68,7 @@
   Hint: Use 'res(mt_rainier)' to get the length of one raster cell.
 
 - Class: text
-  Output: The unit of this resolution value is degrees. 0.0002777778 degrees is one arc second or 1/3600 degrees. The equivalent of one degree in meters can vary depending on the latitude. A longitudinal degree for example is longest at the equator and gets shorter with proximity to the poles. We will cover more details in a later lesson on Coordinate Reference Systems. For latitudes in our data set (~46.7), 0.00027777778 degrees correspond to approximately 30m in latitude and 21m in longitude.
+  Output: The unit of this resolution value is degrees. 0.0002777778 degrees is one arc second or 1/3600 degrees. The equivalent of one degree in meters can vary depending on the latitude. A longitudinal degree for example is longest at the equator and gets shorter with proximity to the poles. We will cover more details in a later lesson on Coordinate Reference Systems. For latitudes in our data set (about 47 degrees north), 0.00027777778 degrees correspond to approximately 30m in latitude and 21m in longitude.
 
 - Class: text
   Output: Judging from the axes values of our plot on the right the data set must be located somewhere in western North America.
@@ -95,19 +95,31 @@
   Output: Earlier we realized that our dataset is quite large and we are only interested in Mount Rainier. So let's reduce the data set a little. For this we should specify a smaller extent first.
 
 - Class: cmd_question
-  Output: Use the 'drawExtent()'-function and select your area of interest by hand, for example the mountain itself. Store this extent in a variable called 'ex'. After executing drawExtent(), click on the plot twice for two diagonal corners of a rectangle. NOTE! Due to its internal structure SWIRL executes all your commands twice. Normally you don't notice, but drawExtent() will act funny. You will have to draw your rectangle twice, while the first one will be stored. Don't worry, consider it additional practice ;)
-  CorrectAnswer: ex <- drawExtent()
-  AnswerTests: expr_uses_func('drawExtent')
-  Hint: Type ex <- drawExtent(), execute and click on the plot twice - lower left and upper right corner.
+  Output: To specify simple geographic extents one needs to define only two diagonally opposite corners of a rectangle. Use the click()-function twice to get the exact coordinates of your desired extent. Type 'click()', hit ENTER and doubleclick on the bottom left corner, e.g. south-west of the mountain.
+  CorrectAnswer: click()
+  AnswerTests: expr_uses_func('click')
+  Hint: The 'click()'-function belongs to the raster-package. It does not need an further agruments, but your raster data set should be plotted in your plot window.
+  
+- Class: cmd_question
+  Output: Now  use 'click()' again and doubleclick the top right corner of your extent.
+  CorrectAnswer: click()
+  AnswerTests: expr_uses_func('click')
+  Hint: Just use 'click()' to specify the top right corner of your rectangle. The function belongs to the raster-package. It does not need an further agruments, but your raster data set should be plotted in your plot window.
+
+- Class: text
+  Output: In the console you can now see the output of the two 'click'-commands. The function just provides us with information. We now have to tell R to make an extent-object from that.
+
+- Class: text
+  Output: The 'extent'-function is what we need. It takes in four values - Xmin, Xmax, Ymin, Ymax (the order is important!) - and creates an extent object.
 
 - Class: cmd_question
-  Output: Did that work for you? If yes, just type 'skip()'. If not, try again with 'ex <- drawExtent()'. This time place your first click on the upper left and the second click on the lower right corner of your new window.
-  CorrectAnswer: ex <- drawExtent()
-  AnswerTests: expr_uses_func('drawExtent')
-  Hint: Use 'ex <- drawExtent()' to create the extent once more or just type 'skip()'.
+  Output: Use the 'extent'-function and store the result in a variable like this. ex <- extent(Xmin, Xmax, Ymin, Ymax). You can also roughly round your X- and Y-values manually. Make sure to use both X-values first, than both Y-values ("bottom-left-X", "top-right-X", "bottom-left-Y", "top-right-Y").
+  CorrectAnswer: ex <- extent(-121.8363, -121.6776, 46.81611, 46.90703)
+  AnswerTests: expr_uses_func('extent')
+  Hint: Use the 'extent'-function and store the result by pasting the X- and Y-coordinates from the 'click'-commands earlier. ex <- extent( "bottom-left-X", "top-right-X", "bottom-left-Y", "top-right-Y")
 
 - Class: cmd_question
-  Output: To reduce the data we can now crop to our new extent. The crop()-function takes in a raster and an extent-object. Try cropping your dataset in the following manner. mt_rainier_crop <- crop(mt_rainier, 'extent-object') 
+  Output: To reduce the data we can now crop it to our new extent. The 'crop()'-function takes in a raster and an extent-object. Try cropping your dataset in the following manner. mt_rainier_crop <- crop(mt_rainier, 'extent-object') 
   CorrectAnswer: mt_rainier_crop <- crop(mt_rainier, ex)
   AnswerTests: expr_uses_func('crop')
   Hint: Try e.g. mt_rainier_crop <- crop(mt_rainier, ex) if your extent from earlier is called ex.
@@ -155,5 +167,4 @@
   Hint: Plot the modified raster with 'plot(mt_rainier_2000)'.
 
 - Class: text
-  Output: As you can see, the extent of the raster stayed the same. This means no cells were deleted, but they are now occupied with NA-values. By default R displays them in white.
-
+  Output: As you can see, the extent of the raster stayed the same. This means no cells were deleted, but they are now occupied with NA-values. By default R displays them in white. That is enough for now. We will cover a few more advanced plotting commands in a later lesson.
