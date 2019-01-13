@@ -1,0 +1,71 @@
+- Class: meta
+  Course: Spatial_Data_in_R
+  Lesson: Vector_Basics
+  Author: Johannes Heisig
+  Type: Standard
+  Organization: UN-SPIDER / University of Bayreuth
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to the second lesson in this SWIRL-course on spatial data! In the following we will cover some basics of handling vector data in R.
+
+- Class: mult_question
+  Output: Which of the four terms below is NOT associated with spatial vector data?
+  AnswerChoices: raster cells; points; lines; polygons
+  CorrectAnswer: raster cells
+  AnswerTests: omnitest(correctVal='raster cells')
+  Hint: Vector data only includes points, lines and polygons!
+
+- Class: text
+  Output: Vector data represents spatial structures in three simple geometries - points, lines, and polygons. These features are typically used to describe discrete and well-defined shapes (e.g. points-of-interest, rivers and roads, administrative boundaries).
+
+- Class: text
+  Output: On the right you should already see the region where we will explore some vector data. If not, please press Ctrl+6.
+
+- Class: text
+  Output: We will focus on the cantone Zurich in Switzerland. The country border is just for your orientation. In the background there are several data sets loaded for you.
+
+- Class: cmd_question
+  Output: The variables 'z', 'z.poi', and 'z.roads' contain example data sets for each vector data type. Find out what they are by applying the 'class'-function to all of them like this - 'lapply(c(z, z.poi, z.roads), class)'.
+  CorrectAnswer: lapply(c(z, z.poi, z.roads), class)
+  AnswerTests: omnitest(correctExpr='lapply(c(z, z.poi, z.roads), class)')
+  Hint: lapply excecutes a function for each item from a list. Copy and paste 'lapply(c(z, z.poi, z.roads), class) and hit ENTER to excecute 'class()' for each of the three data sets. Keep in mind that their order is important for SWIRL to mark your answer as correct.
+
+- Class: text
+  Output: R tells us our data is stored in SpatialPoints-, SpatialPolygons and SpatialLinesDataFrames. These classes belong to the 'sp'-package.
+
+- Class: cmd_question
+  Output: Get yourself a first visual impression of our example data. We prepared the plot-window so you can plot up to 4 layers in one frame. You can now simply use the 'lapply'-statement from earlier, just with 'plot' instead of 'class'.
+  CorrectAnswer: lapply(c(z, z.poi, z.roads), plot)
+  AnswerTests: omnitest(correctExpr='lapply(c(z, z.poi, z.roads), plot)')
+  Hint: Use the 'lapply'-expression from earlier (press the UP-arrow) and replace 'class' with 'plot'.
+
+- Class: text
+  Output: Very nice! We now have a rough idea of what we are dealing with. We will get back to these data, but first let us explore some more.
+
+- Class: cmd_question
+  Output: The 'z.nat'-variable stores polygons of different natural features in the Zurich cantone. Use 'summary()' to get some meta data!
+  CorrectAnswer: summary(z.nat)
+  AnswerTests: omnitest(correctExpr='summary(z.nat)')
+  Hint: Just type 'summary(z.nat)'.
+
+- Class: text
+  Output: The first line of the summary states that this is a SpatialPolygonsDataFrame. We can further see geographic extent and projection.
+
+- Class: text
+  Output: In the lower section we get an overview on the non-spatial information linked to the polygons. Every polygon is assigned an ID from OSM (Open Street Map), a name and the type of natural feature. The summary lists the count of occurrence of each attribute.
+
+- Class: text
+  Output: We can now take advantage of this categorization when excracting polygons of one specific type. The 'subset'-function selects a part of the data frame fulfilling certain criteria.
+
+- Class: text
+  Output: Let's extract the areas of the cantone covered by forests. The first argument of the 'subset'-function will be the 'z.nat'-variable. The second argument will be a query statement, returning TRUE or FALSE for each row of the data frame. If TRUE, the instance will be included in the subset. Operators for these statements are e.g. '==', '<', '>', '!='.
+
+- Class: cmd_question
+  Output: Use the following line to extract all forest - 'subset(z.nat, type == 'forest')'. Store the subset in 'z.forests'
+  CorrectAnswer: z.forests <- subset(z.nat, type == 'forest')
+  AnswerTests: test_subset()
+  Hint:  Try pasting this - z.forests <- subset(z.nat, type == 'forest') . 'z.nat' is the data set to make the subset from. 'type' is the name of the column storing the information on whether a polygon belongs to the forests or not. Make sure to store it in 'z.forests' ('z.forests <- ...').
+
+- Class: text
+  Output: Besides our new forests layer we have a few more vector data sets loaded. You can see them in the 'Environment'-tab or bypressing Ctrl+8. Before putting them together to an overview map we should modify the R plot window, so only 1, not 4 seperate maps are plotted. The plot parameter 'mfrow' divides the window into parts with a matrix. We will create a matrix with 1 row and 1 column. Try 'par(mfrow=c(1,1)'.
