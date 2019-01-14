@@ -68,22 +68,22 @@
   Hint:  Try pasting this - z.forests <- subset(z.nat, type == 'forest') . 'z.nat' is the data set to make the subset from. 'type' is the name of the column storing the information on whether a polygon belongs to the forests or not. Make sure to store it in 'z.forests' ('z.forests <- ...').
 
 - Class: cmd_question
-  Output: Besides our new forests layer we have a few more vector data sets loaded. You can see them in the 'Environment'-tab or bypressing Ctrl+8. Before putting them together to an overview map we should modify the R plot window, so only 1, not 4 seperate maps are plotted. The plot parameter 'mfrow' divides the window into parts with a matrix. We will create a matrix with 1 row and 1 column. Try 'par(mfrow=c(1,1)'.
-  CorrectAnswer: par(mfrow=c(1,1)
+  Output: Besides our new forests layer we have a few more vector data sets loaded. You can see them in the 'Environment'-tab or by pressing Ctrl+8. Before putting them together to an overview map we should modify the R plot window, so only 1, not 4 seperate maps are plotted. The plot parameter 'mfrow' divides the window into parts with a matrix. We will create a matrix with 1 row and 1 column. Try 'par(mfrow=c(1,1)'.
+  CorrectAnswer: par(mfrow=c(1,1))
   AnswerTests: test_graphic_par()
-  Hint: 'par()' can set 72 attributes defining the plot window. Execute the expression from above. If SWIRL does not accept your answer, maybe your window was affected by plots before this session. Use 'play()' to pause the lesson and 'dev.off()' to turn off your graphic device (plot window). Then use the 'par()'-expression from above. The next plot will turn the device back on.
+  Hint: The 'par()'-function can set 72 attributes defining the plot window. Execute the expression from above. If SWIRL does not accept your answer, maybe your window was affected by plots before this session. Use 'play()' to pause the lesson and 'dev.off()' to turn off your graphic device (plot window). Then use the 'par()'-expression from above. The next plot will turn the device back on.
 
 - Class: cmd_question
   Output: Now you are good to go. Plot your new 'z.forests'-variable. Specify the color (col) of the polygons to be 'lightgreen'.
-  CorrectAnswer: plot(z.forests, col='green')
-  AnswerTests: omnitest(correctExpr='plot(z.forests, col='green')')
+  CorrectAnswer: plot(z.forests)
+  AnswerTests: omnitest(correctExpr='plot(z.forests)')
   Hint: To plot 'z.forests' in lightgreen, use plot(z.forests, col='lightgreen')
 
 - Class: cmd_question
   Output: We can now see the forested areas, but have no scale. The 'area()'-function calculates the area of each spatial object (in our case for every single forest polygon) in square meters. Find out how much area of Zurich is covered with forest by wrapping 'sum()' around 'area(z.forests)'. Because this is going to be a lot of square meters, divide the result by one million to get square kilometers ('/1000000').
   CorrectAnswer: sum(area(z.forests)) / 1000000
   AnswerTests: omnitest(correctVal='544.1794')
-  Hint: Wrapping 'sum()' around something means placing it into 'sum()' as an argument, like this - sum(area(z.forests)) / 1000000 
+  Hint: Wrapping 'sum()' around something means placing it into 'sum()' as an argument, like this - sum(area(z.forests)) / 1000000
 
 - Class: text
   Output: Let's continue putting together our overview map. The order of layers plotted is crucial, as e.g. wide polygons could overlap points or lines. That's why we started with the forest.
@@ -119,7 +119,7 @@
   Output: Now that you learned how plot vector data and get some meta information, let's perform some basic spatial analyses. Whenever a road crosses a stream or river there must be bridge. Following this theory we can calculate number and locations of all bridges in the cantone.
 
 - Class: text
-  Output:The 'gIntersection()'-command from the 'rgeos'-package is designed for exactly that. It recognizes all intersections between two vector data sets. Intersections of two polygon layers result in another polygon layer. Polygons combined with lines result in lines. As soon as points are involved, no other result than points is possible. 
+  Output: The 'gIntersection()'-command from the 'rgeos'-package is designed for exactly that. It recognizes all intersections between two vector data sets. Intersections of two polygon layers result in another polygon layer. Polygons combined with lines result in lines. As soon as points are involved, no other result than points is possible.
 
 - Class: cmd_question
   Output: Create the variable 'z.bridges' by calculating 'gIntersection()' from 'z.streams' and 'z.roads'. This could take a few seconds...
@@ -174,7 +174,7 @@
 
 - Class: cmd_question
   Output: Quickly overlay the raster with the hospital-locations ('z.hospitals'). Use 'points()' again. The color should be red and the point symbol (pch) should be equal to 15.
-  CorrectAnswer: points(hospitals, col='red', pch=15) 
+  CorrectAnswer: points(hospitals, col='red', pch=15)
   AnswerTests: omnitest(correctExpr='points(z.hospitals, col='red', pch=15)')
   Hint: Type points(hospitals, col='red', pch=15) to overlay the raster with hospital locations.
 
