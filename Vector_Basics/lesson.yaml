@@ -67,5 +67,122 @@
   AnswerTests: test_subset()
   Hint:  Try pasting this - z.forests <- subset(z.nat, type == 'forest') . 'z.nat' is the data set to make the subset from. 'type' is the name of the column storing the information on whether a polygon belongs to the forests or not. Make sure to store it in 'z.forests' ('z.forests <- ...').
 
-- Class: text
+- Class: cmd_question
   Output: Besides our new forests layer we have a few more vector data sets loaded. You can see them in the 'Environment'-tab or bypressing Ctrl+8. Before putting them together to an overview map we should modify the R plot window, so only 1, not 4 seperate maps are plotted. The plot parameter 'mfrow' divides the window into parts with a matrix. We will create a matrix with 1 row and 1 column. Try 'par(mfrow=c(1,1)'.
+  CorrectAnswer: par(mfrow=c(1,1)
+  AnswerTests: test_graphic_par()
+  Hint: 'par()' can set 72 attributes defining the plot window. Execute the expression from above. If SWIRL does not accept your answer, maybe your window was affected by plots before this session. Use 'play()' to pause the lesson and 'dev.off()' to turn off your graphic device (plot window). Then use the 'par()'-expression from above. The next plot will turn the device back on.
+
+- Class: cmd_question
+  Output: Now you are good to go. Plot your new 'z.forests'-variable. Specify the color (col) of the polygons to be 'lightgreen'.
+  CorrectAnswer: plot(z.forests, col='green')
+  AnswerTests: omnitest(correctExpr='plot(z.forests, col='green')')
+  Hint: To plot 'z.forests' in lightgreen, use plot(z.forests, col='lightgreen')
+
+- Class: cmd_question
+  Output: We can now see the forested areas, but have no scale. The 'area()'-function calculates the area of each spatial object (in our case for every single forest polygon) in square meters. Find out how much area of Zurich is covered with forest by wrapping 'sum()' around 'area(z.forests)'. Because this is going to be a lot of square meters, divide the result by one million to get square kilometers ('/1000000').
+  CorrectAnswer: sum(area(z.forests)) / 1000000
+  AnswerTests: omnitest(correctVal='544.1794')
+  Hint: Wrapping 'sum()' around something means placing it into 'sum()' as an argument, like this - sum(area(z.forests)) / 1000000 
+
+- Class: text
+  Output: Let's continue putting together our overview map. The order of layers plotted is crucial, as e.g. wide polygons could overlap points or lines. That's why we started with the forest.
+
+- Class: cmd_question
+  Output: By default R displays every single plot on a fresh canvas. We hence need to tell R to just keep the first canvas and add information to it. In 'plot()' we can specify this with 'add=TRUE'. Try plotting 'z.lakes' in 'lightblue' and add it to the existing plot.
+  CorrectAnswer: plot(z.lakes, col='lightblue', add=TRUE)
+  AnswerTests: omnitest(correctExpr='plot(z.lakes, col='lightblue', add=TRUE)')
+  Hint: Again, you can use the plot-expression from before as a template (UP-arrow). Just exchange the data and the color as described and specify a third argument - 'add=TRUE'.
+
+- Class: cmd_question
+  Output: While the 'add'-argument works great for polygon layers, there is another option for lines - the 'lines()'-function. Like the 'points'-function it does not call a new plot, but adds data to the existing one automatically. Sometimes it is useful to increase the width of a line (lwd) to make it more visible. Try this - 'lines(z.streams, col='royalblue', lwd=1.5)'.
+  CorrectAnswer: lines(z.streams, col='royalblue', lwd=1.5)
+  AnswerTests: omnitest(correctExpr='lines(z.streams, col='royalblue', lwd=1.5)')
+  Hint: Try using the 'lines()'-statement from above. Unlike 'plot()' it does NOT require an 'add=TRUE'.
+
+- Class: cmd_question
+  Output: Looks good! Repeat the last step, this time adding 'z.roads' to the plot. They should be 'orange' and have the same line width as the streams.
+  CorrectAnswer: lines(z.roads, col='orange', lwd=1.5)
+  AnswerTests: omnitest(correctExpr='lines(z.roads, col='orange', lwd=1.5)')
+  Hint: Hit the UP-arrow and exchange the first two arguments.
+
+- Class: cmd_question
+  Output: Finally, to round up the map, lay the shape of the cantone around our data. The polygon is stored in 'z'. You could use 'plot(x,..., add=TRUE)' and specify the polygon to be transparent. It is easier though to just use 'lines()' again. Apply it to 'z' with a red boundary of width 2.
+  CorrectAnswer: lines(z, col='red', lwd=2)
+  AnswerTests: omnitest(correctExpr='lines(z, col='red', lwd=2)')
+  Hint: Do what you learned in the last two steps. I bet you can do it! .... Well, okay, there you go - lines(z, col='red', lwd=2)
+
+- Class: text
+  Output: Et voila! There is your quick and simple overview map in just five lines. If you would like the map to have a title/subtitle next time, make sure to specify them in your first 'plot()'-call.
+
+- Class: text
+  Output: Now that you learned how plot vector data and get some meta information, let's perform some basic spatial analyses. Whenever a road crosses a stream or river there must be bridge. Following this theory we can calculate number and locations of all bridges in the cantone.
+
+- Class: text
+  Output:The 'gIntersection()'-command from the 'rgeos'-package is designed for exactly that. It recognizes all intersections between two vector data sets. Intersections of two polygon layers result in another polygon layer. Polygons combined with lines result in lines. As soon as points are involved, no other result than points is possible. 
+
+- Class: cmd_question
+  Output: Create the variable 'z.bridges' by calculating 'gIntersection()' from 'z.streams' and 'z.roads'. This could take a few seconds...
+  CorrectAnswer: z.bridges <- gIntersection(z.streams, z.roads)
+  AnswerTests: omnitest(correctExpr='z.bridges <- gIntersection(z.streams, z.roads)')
+  Hint: Store the result of gIntersection(z.streams, z.roads) in the new variable z.bridges.
+
+- Class: cmd_question
+  Output: Look at your overview map. How many bridges would you expect and where? Use 'points()' in the same manner as 'lines()' earlier to add their locations to the map. Set the point symbol (pch) equal to 16. By default the point color is black, which is fine in this case.
+  CorrectAnswer: points(z.bridges, pch=16)
+  AnswerTests: omnitest(correctExpr='points(z.bridges, pch=16)')
+  Hint: Use the 'points()'-function to add 'z.bridges'. In the second argument specify 'pch=16'.
+
+- Class: cmd_question
+  Output: Get the 'summary()' of your new variable to view some meta data. How many points or bridge locations did find?
+  CorrectAnswer: summary(z.bridges)
+  AnswerTests: omnitest(correctExpr='summary(z.bridges)')
+  Hint: Just like earlier, use summary(z.bridges) to get some basic meta data about your vector layer.
+
+- Class: text
+  Output: Well done! 290 bridges is quite something. And in this lesson we only use a layer showing the major roads...
+
+- Class: text
+  Output: As a second task we will calculate the proximity to any hospital in our study area.
+
+- Class: cmd_question
+  Output: The locations of hospitals are stored in the 'z.poi'-variable. However, there are not just hospitals, but much more. Create a subset called 'z.hospitals' (like you did for forests earlier) containing only hospitals. If you want to check out the 'z.poi'-data first, pause the lesson with 'play()' and resume later with 'nxt()'.
+  CorrectAnswer: z.hospitals <- subset(z.poi, type == 'hospital')
+  AnswerTests: test_subset2()
+  Hint: Just like earlier, subset the data ('z.poi') by stating type == 'hospital'. Don't forget to store the result in 'z.hospitals'.
+
+- Class: cmd_question
+  Output: Instead of plotting the subset, we can quickly check the X- and Y-coordinates of the hospital locations. Use the 'coordinates()'-function with the variable you just created. There should be 18 value pairs of longitude and latitude.
+  CorrectAnswer: coordinates(z.hospitals)
+  AnswerTests: omnitest(correctExpr='coordinates(z.hospitals)')
+  Hint: Execute coordinates(z.hospitals) to print all poin locations.
+
+- Class: text
+  Output: We will now use a function from the raster-package, 'distanceFromPoints()', that calculates the distance from each raster cell to a (set of) given point(s). The function takes in a raster layer (first argument) and a point vector layer (second argument).
+
+- Class: cmd_question
+  Output: In the background there is a simple raster loaded for you called 'z.ras', covering the Zurich region. All cells have the value 1, so there is no point in exploring the data. Use 'distanceFromPoints()' with 'z.ras' and 'z.hospitals'. Store the result in 'd.hospitals' (d = distance).
+  CorrectAnswer: d.hospitals <- distanceFromPoints(z.ras, z.hospitals)
+  AnswerTests: omnitest(correctExpr='d.hospitals <- distanceFromPoints(z.ras, z.hospitals)')
+  Hint: Create the distance raster with the following expression - d.hospitals <- distanceFromPoints(z.ras, z.hospitals)  . The raster needs to be the first argument!
+
+- Class: cmd_question
+  Output: To see what you just created, plot the new variable.
+  CorrectAnswer: plot(d.hospitals)
+  AnswerTests: omnitest(correctExpr='plot(d.hospitals)')
+  Hint: Just use the 'plot()'-command to display 'd.hospitals'.
+
+- Class: cmd_question
+  Output: Quickly overlay the raster with the hospital-locations ('z.hospitals'). Use 'points()' again. The color should be red and the point symbol (pch) should be equal to 15.
+  CorrectAnswer: points(hospitals, col='red', pch=15) 
+  AnswerTests: omnitest(correctExpr='points(z.hospitals, col='red', pch=15)')
+  Hint: Type points(hospitals, col='red', pch=15) to overlay the raster with hospital locations.
+
+- Class: cmd_question
+  Output: Finally, add the boundary of the cantone. It's not necessary to specify color or line width.
+  CorrectAnswer: lines(z)
+  AnswerTests: omnitest(correctExpr='lines(z)')
+  Hint: Add the outline by using 'lines()'. The polygon is stored in 'z'.
+
+- Class: text
+  Output: Very good! The unit of our data product is meters. With confidence we can now say, that almost no place in the cantone Zurich is further from the next hospital than 20 kilometers (at least in linear distance).
