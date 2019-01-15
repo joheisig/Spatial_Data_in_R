@@ -75,14 +75,14 @@
 
 - Class: cmd_question
   Output: Now you are good to go. Plot your new 'z.forests'-variable. Specify the color (col) of the polygons to be 'lightgreen'.
-  CorrectAnswer: plot(z.forests)
-  AnswerTests: omnitest(correctExpr='plot(z.forests)')
+  CorrectAnswer: plot(z.forests, col='lightgreen')
+  AnswerTests: test_plot_forest()
   Hint: To plot 'z.forests' in lightgreen, use plot(z.forests, col='lightgreen')
 
 - Class: cmd_question
   Output: We can now see the forested areas, but have no scale. The 'area()'-function calculates the area of each spatial object (in our case for every single forest polygon) in square meters. Find out how much area of Zurich is covered with forest by wrapping 'sum()' around 'area(z.forests)'. Because this is going to be a lot of square meters, divide the result by one million to get square kilometers ('/1000000').
   CorrectAnswer: sum(area(z.forests)) / 1000000
-  AnswerTests: omnitest(correctVal='544.1794')
+  AnswerTests: test_area_forest()
   Hint: Wrapping 'sum()' around something means placing it into 'sum()' as an argument, like this - sum(area(z.forests)) / 1000000
 
 - Class: text
@@ -91,32 +91,32 @@
 - Class: cmd_question
   Output: By default R displays every single plot on a fresh canvas. We hence need to tell R to just keep the first canvas and add information to it. In 'plot()' we can specify this with 'add=TRUE'. Try plotting 'z.lakes' in 'lightblue' and add it to the existing plot.
   CorrectAnswer: plot(z.lakes, col='lightblue', add=TRUE)
-  AnswerTests: omnitest(correctExpr='plot(z.lakes, col='lightblue', add=TRUE)')
+  AnswerTests: test_plot_lakes()
   Hint: Again, you can use the plot-expression from before as a template (UP-arrow). Just exchange the data and the color as described and specify a third argument - 'add=TRUE'.
 
 - Class: cmd_question
   Output: While the 'add'-argument works great for polygon layers, there is another option for lines - the 'lines()'-function. Like the 'points'-function it does not call a new plot, but adds data to the existing one automatically. Sometimes it is useful to increase the width of a line (lwd) to make it more visible. Try this - 'lines(z.streams, col='royalblue', lwd=1.5)'.
   CorrectAnswer: lines(z.streams, col='royalblue', lwd=1.5)
-  AnswerTests: omnitest(correctExpr='lines(z.streams, col='royalblue', lwd=1.5)')
+  AnswerTests: test_lines_func()
   Hint: Try using the 'lines()'-statement from above. Unlike 'plot()' it does NOT require an 'add=TRUE'.
 
 - Class: cmd_question
   Output: Looks good! Repeat the last step, this time adding 'z.roads' to the plot. They should be 'orange' and have the same line width as the streams.
   CorrectAnswer: lines(z.roads, col='orange', lwd=1.5)
-  AnswerTests: omnitest(correctExpr='lines(z.roads, col='orange', lwd=1.5)')
+  AnswerTests: test_lines_func()
   Hint: Hit the UP-arrow and exchange the first two arguments.
 
 - Class: cmd_question
-  Output: Finally, to round up the map, lay the shape of the cantone around our data. The polygon is stored in 'z'. You could use 'plot(x,..., add=TRUE)' and specify the polygon to be transparent. It is easier though to just use 'lines()' again. Apply it to 'z' with a red boundary of width 2.
+  Output: Finally, to round up the map, lay the shape of the cantone around our data. The polygon is stored in 'z'. You could use 'plot(x,..., add=TRUE)' and specify the polygon to be transparent. It is easier though to just use 'lines()' again. Apply it to 'z' with a red boundary line of width 2.
   CorrectAnswer: lines(z, col='red', lwd=2)
-  AnswerTests: omnitest(correctExpr='lines(z, col='red', lwd=2)')
+  AnswerTests: test_lines_func()
   Hint: Do what you learned in the last two steps. I bet you can do it! .... Well, okay, there you go - lines(z, col='red', lwd=2)
 
 - Class: text
   Output: Et voila! There is your quick and simple overview map in just five lines. If you would like the map to have a title/subtitle next time, make sure to specify them in your first 'plot()'-call.
 
 - Class: text
-  Output: Now that you learned how plot vector data and get some meta information, let's perform some basic spatial analyses. Whenever a road crosses a stream or river there must be bridge. Following this theory we can calculate number and locations of all bridges in the cantone.
+  Output: Now that you learned how to plot vector data and get some meta information, let's perform some basic spatial analyses. Whenever a road crosses a stream or river there must be bridge. Following this theory we can calculate number and locations of all bridges in the cantone.
 
 - Class: text
   Output: The 'gIntersection()'-command from the 'rgeos'-package is designed for exactly that. It recognizes all intersections between two vector data sets. Intersections of two polygon layers result in another polygon layer. Polygons combined with lines result in lines. As soon as points are involved, no other result than points is possible.
@@ -140,7 +140,7 @@
   Hint: Just like earlier, use summary(z.bridges) to get some basic meta data about your vector layer.
 
 - Class: text
-  Output: Well done! 290 bridges is quite something. And in this lesson we only use a layer showing the major roads...
+  Output: Well done! 290 bridges is quite something. By the way - in this lesson we only use a layer showing the major roads, so there might be many more...
 
 - Class: text
   Output: As a second task we will calculate the proximity to any hospital in our study area.
@@ -174,9 +174,9 @@
 
 - Class: cmd_question
   Output: Quickly overlay the raster with the hospital-locations ('z.hospitals'). Use 'points()' again. The color should be red and the point symbol (pch) should be equal to 15.
-  CorrectAnswer: points(hospitals, col='red', pch=15)
-  AnswerTests: omnitest(correctExpr='points(z.hospitals, col='red', pch=15)')
-  Hint: Type points(hospitals, col='red', pch=15) to overlay the raster with hospital locations.
+  CorrectAnswer: points(z.hospitals, col='red', pch=15)
+  AnswerTests: test_points_func()
+  Hint: Type points(z.hospitals, col='red', pch=15) to overlay the raster with hospital locations.
 
 - Class: cmd_question
   Output: Finally, add the boundary of the cantone. It's not necessary to specify color or line width.
