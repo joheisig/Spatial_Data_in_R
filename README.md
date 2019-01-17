@@ -19,3 +19,7 @@ When the `swirl`-package is loaded, activate the course environment:
 ```s
 swirl()
 ```
+
+## Lessons
+* <b>Raster basics:</b> plot, crop and subset rasters, get basic meta data and stats 
+* <b>Vector basics:</b> explore point, line and polygon features, subset by attribute, create an overview map, calculate layer overlaps
