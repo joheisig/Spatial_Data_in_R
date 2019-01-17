@@ -1,6 +1,6 @@
 # Spatial Data in R
 
-This is an interactive course on spatial data in R :globe_with_meridians:. It can be run inside e.g. RStudio with the `swirl`-package 🌌.
+This is an interactive course on spatial data in R :globe_with_meridians:. It can be run inside e.g. RStudio with the [`swirl`](https://github.com/swirldev)-package 🌌.
 
 ## Installation
 
