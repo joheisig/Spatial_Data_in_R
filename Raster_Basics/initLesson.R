@@ -17,8 +17,8 @@ if(length(new.packages)) install.packages(new.packages)
 try({
 library(raster)
 
-mt_rainier <- raster(file.path(.get_course_path(), 'The_SWIRL_demo_course',
-                               'My_first_demo_lesson','mt_rainier.tif'))
+mt_rainier <- raster(file.path(.get_course_path(), 'Spatial_Data_in_R',
+                               'Raster_Basics','mt_rainier.tif'))
 
 
 })
