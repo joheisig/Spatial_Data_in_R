@@ -53,12 +53,11 @@ try({
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
 
-   t1 <- grepl('plot', ex2)
-   t2 <- grepl('z.forests', ex2)
-   t3 <- grepl('col', ex2)
-   t4 <- grepl('lightgreen', ex2)
+   t1 <- one_is_true(grepl('plot', ex2))
+   t2 <- one_is_true(grepl('z.forests', ex2))
+   t3 <- one_is_true(grepl('lightgreen', ex2))
 
-   ok <- all(t1, t2, t3, t4)
+   ok <- all(t1, t2, t3)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
 }
@@ -79,27 +78,27 @@ try({
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
 
-   t1 <- grepl('plot', ex2)
-   t2 <- grepl('z.lakes', ex2)
-   t3 <- grepl('add', ex2)
-   t4 <- grepl('lightblue', ex2)
+   t1 <- one_is_true(grepl('plot', ex2))
+   t2 <- one_is_true(grepl('z.lakes', ex2))
+   t3 <- one_is_true(grepl('lightblue', ex2))
 
-   ok <- all(t1, t2, t3, t4)
+   ok <- all(t1, t2, t3)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
 }
 
 test_lines_func <- function() {
 try({
-   ex0 <- as.character(getExpr())
+   ex0 <<- as.character(getExpr())
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
-   t1 <- grepl('lines', ex2)
+   
+   t1 <- one_is_true(grepl('lines', ex2))
    tt2 <- c(grepl('z.streams', ex2), grepl('z.roads', ex2), grepl('z', ex2))
    t2 <- one_is_true(tt2)
    tt3 <- c(grepl('royalblue', ex2), grepl('orange', ex2), grepl('red', ex2))
    t3 <- one_is_true(tt3)
-   t4 <- grepl('lwd', ex2)
+   t4 <- one_is_true(c(grepl('1.5', ex2), grepl('2', ex2)))
    ok <- all(t1, t2, t3, t4)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
@@ -110,11 +109,10 @@ try({
    ex0 <<- as.character(getExpr())
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
-   t1 <- grepl('points', ex2)
-   t2 <- grepl('pch', ex2)
-   t3 <- grepl('15', ex2)
-   t4 <- grepl('z.hospitals', ex2)
-   ok <- all(t1, t2, t3, t4)
+   t1 <- one_is_true(grepl('points', ex2))
+   t2 <- one_is_true(grepl('15', ex2))
+   t3 <- one_is_true(grepl('z.hospitals', ex2))
+   ok <- all(t1, t2, t3)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
 }
