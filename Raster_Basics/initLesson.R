@@ -2,6 +2,7 @@
       # lesson is started. Any variables created here will show up in
       # the user's working directory and thus be accessible to them
       # throughout the lesson.
+rm(list=ls())
 
 list.of.packages <- c("raster")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -20,5 +21,5 @@ library(raster)
 mt_rainier <- raster(file.path(.get_course_path(), 'Spatial_Data_in_R',
                                'Raster_Basics','mt_rainier.tif'))
 
-
+rm(list.of.packages, new.packages)
 })

@@ -36,9 +36,6 @@ test_subset <- function() {
    ok <- all(t1, t2)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1, t2, zf)
- options(warn=0)
 }
 
 test_graphic_par <- function() {
@@ -48,14 +45,11 @@ test_graphic_par <- function() {
    ok <- all(t1)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1)
- options(warn=0)
 }
 
 test_plot_forest <- function() {
 try({
-   ex0 <- as.character(getExpr())
+   ex0 <<- as.character(getExpr())
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
 
@@ -67,29 +61,21 @@ try({
    ok <- all(t1, t2, t3, t4)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1, t2, t3, t4, ex1, ex2, ex0)
- options(warn=0)
 }
 
 test_area_forest <- function(){
     try({
        ex0 <<- as.numeric(getVal())
-
        t1 <- ex0 > 540
        t2 <- ex0 < 550
-
        ok <- all(t1, t2)
      }, silent = TRUE)
      exists('ok') && isTRUE(ok)
-     options(warn=-1)
-     rm(ok, t1, t2)
-     options(warn=0)
 }
 
 test_plot_lakes <- function() {
 try({
-   ex0 <- as.character(getExpr())
+   ex0 <<- as.character(getExpr())
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
 
@@ -101,9 +87,6 @@ try({
    ok <- all(t1, t2, t3, t4)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1, t2, t3, t4, ex1, ex2, ex0)
- options(warn=0)
 }
 
 test_lines_func <- function() {
@@ -111,42 +94,29 @@ try({
    ex0 <- as.character(getExpr())
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
-
    t1 <- grepl('lines', ex2)
-
    tt2 <- c(grepl('z.streams', ex2), grepl('z.roads', ex2), grepl('z', ex2))
    t2 <- one_is_true(tt2)
-
    tt3 <- c(grepl('royalblue', ex2), grepl('orange', ex2), grepl('red', ex2))
    t3 <- one_is_true(tt3)
-
    t4 <- grepl('lwd', ex2)
-
    ok <- all(t1, t2, t3, t4)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1, t2, t3, t4, tt2, tt3,  ex1, ex2, ex0)
- options(warn=0)
 }
 
 test_points_func <- function() {
 try({
-   ex0 <- as.character(getExpr())
+   ex0 <<- as.character(getExpr())
    ex1 <- sub('"', "", sub('"', "", ex0))
    ex2 <- sub("'", "", sub("'", "", ex1))
-
    t1 <- grepl('points', ex2)
    t2 <- grepl('pch', ex2)
    t3 <- grepl('15', ex2)
    t4 <- grepl('z.hospitals', ex2)
-
    ok <- all(t1, t2, t3, t4)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1, t2, t3, t4, ex1, ex2, ex0)
- options(warn=0)
 }
 
 test_subset2 <- function() {
@@ -157,9 +127,6 @@ test_subset2 <- function() {
    ok <- all(t1, t2)
  }, silent = TRUE)
  exists('ok') && isTRUE(ok)
- options(warn=-1)
- rm(ok, t1, t2, zh)
- options(warn=0)
 }
 
 

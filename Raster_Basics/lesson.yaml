@@ -29,10 +29,19 @@
   Hint: Just type 'plot(mt_rainier)' and hit ENTER.
 
 - Class: text
-  Output: The plot already gives us an idea about the location of our dataset as x- and y-axes are labled with geographic coordinates. It also suggests, that values range from below 1000m to above 4000m, which seems reasonable for mountainous regions.
+  Output: The plot already gives us an idea about location and extent of our data set. It also suggests, that values range from below 1000m to above 4000m, which seems reasonable for mountainous regions.
+
+- Class: cmd_question
+  Output: Let's view some basic meta data that R stores together with the raster values. Just type the name of the raster and hit ENTER. Getting this kind of overview before starting to work with the data set is good practice. 
+  CorrectAnswer: mt_rainier
+  AnswerTests: omnitest(correctExpr='mt_rainier')
+  Hint: Execute 'mt_rainier'.
 
 - Class: text
-  Output: Let's view some more specific metadata. The 'cellStats()'-function is great for getting basic statistics on the entire data set. First we are interested in the value range (minimum and maximum) of our elevation data.
+  Output: Pretty handy, right? We got all the important information in one place. Sometimes though, we would like to access single items from this meta data list, for example to print the resolution in a plot description or to use the extent information to manipulate your data.
+
+- Class: text
+  Output: We will now extract these bits of information individually. The 'cellStats()'-function is great for getting basic statistics on the entire data set. First we are interested in the value range (minimum and maximum) of our elevation data.
 
 - Class: cmd_question
   Output: Type 'cellStats(mt_rainier, range)' to see highest and lowest elevation values. 
@@ -56,9 +65,9 @@
   Hint: Use 'ncol(mt_rainier)' to get the number of columns.
 
 - Class: cmd_question
-  Output: Finally try the ncell()-function in the same manner. You could also multiply the two numbers by hand or by using the two functions from above --> ncell(x) = nrow(x) * ncol(x) = 2159 * 1799.
-  CorrectAnswer: 3884041
-  AnswerTests: omnitest(correctVal='3884041')
+  Output: Finally try the ncell()-function in the same manner. You could also multiply the two numbers by hand or by using the two functions from above --> 'ncell(x) = nrow(x) * ncol(x) = 2159 * 1799'.
+  CorrectAnswer: 4079076
+  AnswerTests: omnitest(correctVal='4079076', correctExpr='ncell(mt_rainier)')
   Hint: Use 'ncell(mt_rainier)' to get the number of cells.
 
 - Class: cmd_question
@@ -68,34 +77,25 @@
   Hint: Use 'res(mt_rainier)' to get the length of one raster cell.
 
 - Class: text
-  Output: The unit of this resolution value is degrees. 0.0002777778 degrees is one arc second or 1/3600 degrees. The equivalent of one degree in meters can vary depending on the latitude. A longitudinal degree for example is longest at the equator and gets shorter with proximity to the poles. We will cover more details in a later lesson on Coordinate Reference Systems. For latitudes in our data set (about 47 degrees north), 0.00027777778 degrees correspond to approximately 30m in latitude and 21m in longitude.
+  Output: The map units of this data set are meters. Because the raster was projected from geographic to UTM coordinates, cells are not perfectly square. We will cover more details in a later lesson on Coordinate Reference Systems.
 
 - Class: text
-  Output: Judging from the axes values of our plot on the right the data set must be located somewhere in western North America.
+  Output: The two axes of our plot on the right give as a hint on the position of the data set within UTM zone 10 North, which is located somewhere in western North America.
 
 - Class: cmd_question
-  Output: However, let's find out about the exact spatial extent of the raster. Use the extent()-command with the mt_rainier dataset as an argument.
+  Output: However, let's find out about the exact spatial extent of the raster. Use the 'extent()'-command with the 'mt_rainier' dataset as an argument.
   CorrectAnswer: extent(mt_rainier)
   AnswerTests: omnitest(correctExpr='extent(mt_rainier)')
   Hint: Be careful to spell extent with a 't' in the end, not a 'd'. Type 'extent(mt_rainier)'.
 
 - Class: text
-  Output: We can observe, that our dataset is about half a degree wide in both latitude and longitude.
-
-- Class: cmd_question
-  Output: Now we already know quite a bit about our data. Getting this kind of overview before starting to work with the data set is good practice. We will now display the same metadata again, but this time with a little shortcut. Just type the name of the raster and hit ENTER.
-  CorrectAnswer: mt_rainier
-  AnswerTests: omnitest(correctExpr='mt_rainier')
-  Hint: Execute 'mt_rainier'.
-
-- Class: text
-  Output: Pretty handy, right? But why did we go through all that metadata step-by-step? Because now you know how to access these single bits of information easily. Later you might want to print only the resolution in a plot heading or use the extent information to manipulate your data.
+  Output: When comparing min and max values, we can observe that our data set is about 40 km wide in in x- and 67 km wide in y-direction.
 
 - Class: text
   Output: Earlier we realized that our dataset is quite large and we are only interested in Mount Rainier. So let's reduce the data set a little. For this we should specify a smaller extent first.
 
 - Class: cmd_question
-  Output: To specify simple geographic extents one needs to define only two diagonally opposite corners of a rectangle. Use the click()-function twice to get the exact coordinates of your desired extent. Type 'click()', hit ENTER and doubleclick on the bottom left corner, e.g. south-west of the mountain.
+  Output: To specify simple geographic extents one needs to define only two diagonally opposite corners of a rectangle. Use the 'click()'-function twice to get the exact coordinates of your desired extent. Type 'click()', hit ENTER and doubleclick on the bottom left corner, e.g. south-west of the mountain.
   CorrectAnswer: click()
   AnswerTests: expr_uses_func('click')
   Hint: The 'click()'-function belongs to the raster-package. It does not need an further agruments, but your raster data set should be plotted in your plot window.
