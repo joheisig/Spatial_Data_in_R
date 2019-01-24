@@ -21,10 +21,21 @@ setwd(path)
 
 
 
-if (dir.exists('results') == TRUE){
-  unlink('results', recursive = T)
+
+# delete .tif files created in earlier tries of this lesson
+tifs <- list.files(pattern = '.tif')
+
+for (i in tifs){ 
+  if (file.exists(i)==T){
+    file.remove(i)
+  }
+  
 }
 
-dir.create('results')
-getwd()
+#if (dir.exists('results') == TRUE){
+#  unlink('results', recursive = T)
+#}
+#dir.create('results')
+
+#getwd()
 

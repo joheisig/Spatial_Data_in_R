@@ -62,18 +62,89 @@
   Hint: Use the 'raster'-function to read in the .grd file we listed a few steps before. There is no need to paste the whole path, because R automatically looks in our working directory. Create a new variable like this - r1 <- raster(...)
 
 - Class: cmd_question
-  Output: The other common package is called 'rgdal'. 'GDAL' stands for Geospatial Data Abstraction Library. Repeat the last step and load the 'rgdal'-package.
+  Output: The other common package is called 'rgdal'. 'GDAL' stands for Geospatial Data Abstraction Library. Load the 'rgdal'-package with 'library()'.
   CorrectAnswer: library(rgdal)
   AnswerTests: omnitest(correctExpr='library(rgdal)')
   Hint: Type library(rgdal) .
 
 - Class: cmd_question
+  Output: We can also load a raster with the 'readGDAL()'-command. Try it by creating a new variable called 'r2' from the same data set as before. As a second option, instead of typing the file name ("mount_rainier.grd") you could also try using the 'list.files()'-expression from earlier. Because this returns a list, specify that you only want to use the first item - 'list.files(pattern=".grd$")[[1]]'
+  CorrectAnswer: r2 <- readGDAL(list.files(pattern=".grd$")[[1]])
+  AnswerTests: any_of_exprs('r2 <- readGDAL("mount_rainier.grd")', 'r2 <- readGDAL(list.files(pattern=".grd$")[[1]])')
+  Hint: For the simple solution put "mount_rainier.grd" inside 'readGDAL()'. The advanced option is useful if you think about reusing this line. In a loop for example, where you read in many data sets, all that needs to change is the index number in [[brackets]]. In this case we list all .grd-files and take the first one to create our raster.
+
+- Class: cmd_question
+  Output: First, we want to inspect 'r1', which we created with the 'raster()'-function. Plot it quickly!
+  CorrectAnswer: plot(r1)
+  AnswerTests: omnitest(correctExpr='plot(r1)')
+  Hint: Just type plot(r1).
+  
+- Class: cmd_question
+  Output: Now use 'str()' to explore the structure of 'r1'.
+  CorrectAnswer: str(r1)
+  AnswerTests: omnitest(correctExpr='str(r1)')
+  Hint: By executing str(r1) you will get an idea of the internal data structure of an object.
+
+- Class: text
+  Output: The first line states, that this object belongs to the class 'RasterLayer', which is part of [package "raster"]. Below you see some meta data, grouped into different categories.
+  
+- Class: text
+  Output: These categories are called slots and help structuring information in R objects. You can imagine them as drawers in a cabinet. They can be accessed by typing an '@' behind an object, just like using the '$'-sign with data frames. Each slot can again have sub-slots, like little compartments in a drawer. For example, to access the maximum value of the raster, one could use 'r1@data@max'.
+  
+- Class: cmd_question
+  Output: Repeat the last two steps for the 'r2'-variable. First plot it...
+  CorrectAnswer: plot(r2)
+  AnswerTests: omnitest(correctExpr='plot(r2)')
+  Hint: Just type plot(r2).
+  
+- Class: cmd_question
+  Output: ...then explore its structure and view the slots it contains.
+  CorrectAnswer: str(r2)
+  AnswerTests: omnitest(correctExpr='str(r2)')
+  Hint: Like before, use str(r2) to get a structural overview of your object.
+  
+- Class: text
+  Output: Take a moment to explore the changes in the plot window, as well as in the console. How does the structure of 'r1' and 'r2' compare?
+  
+- Class: text
+  Output: Although 'r2' comes from a .grd-raster-file, it is not considered a 'RasterLayer' in R but belongs to class 'SpatialGridDataFrame' from [package "sp"]. The structure of both objects differs, e.g. in slot numbers - 12 slots in 'r1' vs. 4 in 'r2'.
+
+- Class: text
+  Output: Different classes also have different methods for the standard 'plot()'-function. As you can see in your plot window, the second plot has different colors, a larger legend and no axes lables. 
+
+- Class: text
+  Output: Which class to use depends on your task and preference. We will now manipulate our raster stored in 'r1' with a simple calculation. This is just a symbol for the analysis you would conduct before exporting your result. 
+  
+- Class: cmd_question
+  Output: Convert elevation data from Mount Rainier from meters (current unit) to feet. 1 meter = 3.28084 feet. Create a new variable 'r1.feet' by multiplying 'r1' with the factor.
+  CorrectAnswer: r1.feet <- r1 * 3.28084
+  AnswerTests: omnitest(correctExpr='r1.feet <- r1 * 3.28084')
+  Hint: Create 'r1.feet' by assigning the product of 'r1' and 3.28084. the multiplication sign is * .
+
+- Class: text
+  Output: If you now want to check the structure off 'r1.feet', you probably have many possibilites in mind. Here is a way of exploring without any R-commands - press Ctrl+8 to view your global environment and scroll to the 'r1.feet' drowp-down menu. See the min and max values in the @data slot?
+
+- Class: text
+  Output: We will now export our product to the working directory. Even though it was a .grd file when we imported it, we will now change its format and write it as a GeoTIFF (.tif).
+  
+- Class: cmd_question
+  Output: Use the 'writeRaster()'-function for the export. The first argument should be 'r1.feet'. The second one specifies the path and/or filename. In quotes, give your output a precise name and DO NOT FORGET the file extension (e.g. "mount_rainier_feet.tif""). As a third argument, add 'overwrite = TRUE', so old versions with the same name can get replaced by new ones.
+  CorrectAnswer: writeRaster(r1.feet, "mount_rainier_feet.tif" , overwrite=TRUE)
+  AnswerTests: omnitest(correctExpr='writeRaster(r1.feet, "mount_rainier_feet.tif" , overwrite=TRUE)')
+  Hint: Writing a raster with 'writeRaster()' only requires two things - the R raster object and the filename of the export. But we will add a third argument, to avoid an error, in case the file already exists. This is useful, when you are experimenting with your analysis. For this excercise try 'writeRaster(r1.feet, "mount_rainier_feet.tif", overwrite=TRUE)'
+
+- Class: text
+  Output: You sucessfully imported and exported a raster data set! If you want to check if the file really made it to your directory, navigate to the folder in your explorer. There is a second option, to view this folder in RStudio directly. Press Ctrl + 5 and under "More", select "Go To Working Directory".
+  
+- Class: text
+  Output: In the second part of this lesson we will focus on vector data. Like rasters, vectors can be imported from a file directly.
+  
+- Class: cmd_question
   Output: 
   CorrectAnswer: 
   AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
-  Hint: 
-
-
+  Hint:
+  
 - Class: mult_question
   Output: 
   AnswerChoices: ANS;2;3
