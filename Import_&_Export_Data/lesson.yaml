@@ -1,0 +1,98 @@
+- Class: meta
+  Course: Spatial Data in R
+  Lesson: Import & Export Data
+  Author: your name goes here
+  Type: Standard
+  Organization: your organization's name goes here
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to the third lesson in this course! This time we will learn how to import spatial data into R and how to export it once we are done with our analysis. 
+
+- Class: text
+  Output: In the first two lesson you learned, that geospatial data mainly comes in two forms - rasters and vectors. They store spatial information very different from each other. Let's start with raster data sets!
+
+- Class: text
+  Output: Before you can import, load or read in any data, you should know where it is located at. Typically you set your working directory to the folder containing the data, using the 'setwd()'command (wd = working directory). This saves you time and space when specifying file paths later. 
+
+- Class: cmd_question
+  Output: In preparation of this lesson the working directory was set for you. Find out where it is by using the 'getwd()'-function. 
+  CorrectAnswer: getwd()
+  AnswerTests: omnitest(correctExpr='getwd()')
+  Hint: Use getwd() to find out where R sees your 'home-folder'.
+
+- Class: text
+  Output: What does the path tell you? It's pretty long and the folder seems to be hidden somewhere deep down on your drive. This is actually the location where all files for this are stored. 
+  
+- Class: cmd_question
+  Output: We will now list all the files stored in this directory. Because we set a working directory already, there is no need specify a path. Try 'list.files()'. 
+  CorrectAnswer: list.files()
+  AnswerTests: omnitest(correctExpr='list.files()')
+  Hint: Use list.files() to print all files in your current working directory.
+
+- Class: mult_question
+  Output:  We can see a variety of files in different formats. Which of the following file extensions commonly marks a raster file?
+  AnswerChoices: .R, .yaml, .grd, .txt
+  CorrectAnswer: .grd
+  AnswerTests: omnitest(correctVal= '.grd')
+  Hint: .R-, .yaml- and .txt files usually do not store spatial information. .grd stands for Gridded Data and can be used to store raster data.
+
+- Class: cmd_question
+  Output: Imagine your working directory is full of data files with many different extensions. But you are only interested in one specific file type. Repeat the 'list.files()'-command from before, this time setting the 'pattern'-argument to ".grd$". This will filter your results.
+  CorrectAnswer: list.files(pattern=".grd$")
+  AnswerTests: omnitest(correctExpr='list.files(pattern=".grd$")')
+  Hint: We use list.files(pattern=".grd$") to filter the list of files. The $-sign makes sure, that there is no character after '.grd'. This avoids listing e.g. auxilary files like some_raster.grd.aux.xml.
+  
+- Class: cmd_question
+  Output: In R there are two standard packages for handeling raster data. The first one is simply called 'raster'. Load it with the 'library()'-command so we can use its commands later.
+  CorrectAnswer: library(raster)
+  AnswerTests: omnitest(correctExpr='library(raster)')
+  Hint: Type library(raster) .
+
+- Class: cmd_question
+  Output: The 'raster'-package has a 'raster()'-function which creates RasterLayer objects. There are many data types (or signatures) that can be used as inputs. Type '?raster' to call the help page and explore what inputs are eligible.
+  CorrectAnswer: ?raster
+  AnswerTests: omnitest(correctExpr='?raster')
+  Hint: Putting a ? in front of any command will refer you to the R help page. Do not use () though.
+
+- Class: cmd_question
+  Output: We will go with the method for signature character, as we know name and location of our file. Create a new variable 'r1' in which you store 'raster("mount_rainier.grd")'. This imports the raster file we discovered earlier.
+  CorrectAnswer: r1 <- raster("mount_rainier.grd")
+  AnswerTests: omnitest(correctExpr='r1 <- raster("mount_rainier.grd")')
+  Hint: Use the 'raster'-function to read in the .grd file we listed a few steps before. There is no need to paste the whole path, because R automatically looks in our working directory. Create a new variable like this - r1 <- raster(...)
+
+- Class: cmd_question
+  Output: The other common package is called 'rgdal'. 'GDAL' stands for Geospatial Data Abstraction Library. Repeat the last step and load the 'rgdal'-package.
+  CorrectAnswer: library(rgdal)
+  AnswerTests: omnitest(correctExpr='library(rgdal)')
+  Hint: Type library(rgdal) .
+
+- Class: cmd_question
+  Output: 
+  CorrectAnswer: 
+  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
+  Hint: 
+
+
+- Class: mult_question
+  Output: 
+  AnswerChoices: ANS;2;3
+  CorrectAnswer: ANS
+  AnswerTests: omnitest(correctVal= 'ANS')
+  Hint: hint
+
+- Class: cmd_question
+  Output: 
+  CorrectAnswer: 
+  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
+  Hint: 
+
+- Class: text
+  Output: 
+
+- Class: mult_question
+  Output: 
+  AnswerChoices: ANS;2;3
+  CorrectAnswer: ANS
+  AnswerTests: omnitest(correctVal= 'ANS')
+  Hint: hint
