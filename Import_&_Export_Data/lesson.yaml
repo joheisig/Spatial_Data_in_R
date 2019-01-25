@@ -137,33 +137,105 @@
   Output: You sucessfully imported and exported a raster data set! If you want to check if the file really made it to your directory, navigate to the folder in your explorer. There is a second option, to view this folder in RStudio directly. Press Ctrl + 5 and under "More", select "Go To Working Directory".
   
 - Class: text
-  Output: In the second part of this lesson we will focus on vector data. Like rasters, vectors can be imported from a file directly.
+  Output: In the second part of this lesson we will focus on importing and exporting vector data. Like rasters, vectors can be imported from a file directly.
   
 - Class: cmd_question
-  Output: 
-  CorrectAnswer: 
-  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
-  Hint:
+  Output: Use the 'readOGR()'-command to import the file 'nightclubs_zurich.shp'. Store this data in a new variable called 'n1'. Background fact - OGR stands for 'OpenGIS Simple Features Reference Implementation' and generally describes vector data in the open source GIS world.
+  CorrectAnswer: n1 <- readOGR("nightclubs_zurich.shp")
+  AnswerTests: omnitest(correctExpr='n1 <- readOGR("nightclubs_zurich.shp")')
+  Hint: You can read in a shapefile like you did earlier with the raster. This time use 'readOGR()', not 'readGDAL()'. Create a new variable like this - n1 <- readOGR(...)
+  
+- Class: cmd_question
+  Output: View 'str()' of 'n1' and make yourself familiar with its structure.
+  CorrectAnswer: str(n1)
+  AnswerTests: omnitest(correctExpr='str(n1)'', correctVal=VAL')
+  Hint: Use str(n1) to get information on the structure of an object.
   
 - Class: mult_question
-  Output: 
-  AnswerChoices: ANS;2;3
-  CorrectAnswer: ANS
-  AnswerTests: omnitest(correctVal= 'ANS')
-  Hint: hint
+  Output: Which class does 'n1' belong to?
+  AnswerChoices: SpatialPointsDataFrame;SpatialPoints;SpatialMultiPoints;Shapefile
+  CorrectAnswer: SpatialPointsDataFrame
+  AnswerTests: omnitest(correctVal= 'SpatialPointsDataFrame')
+  Hint: In R, it is not a shapefile anymore, but spatial points that are stored in a data frame.
+
+- Class: mult_question
+  Output: How many point features are stored in this object?
+  AnswerChoices: 34;5;104353615;2
+  CorrectAnswer: 34
+  AnswerTests: omnitest(correctVal= '34')
+  Hint: There is no line explicitly stating "There are X features". But for each point there is one row in the data frame - also called observation (obs.).
 
 - Class: cmd_question
-  Output: 
-  CorrectAnswer: 
-  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
-  Hint: 
+  Output: Great, seems like you got the concept of spatial objects in R! So far we used 'plot()' to display our data. We will now try a different, interactive display, by using the 'mapview()'-command from the package of the same name. The package is loaded for you in the background, so you can go ahead and try 'mapview(n1)'. The map will be displayed in the RStudio Viewer, not in Plots.
+  CorrectAnswer: mapview(n1)
+  AnswerTests: omnitest(correctExpr='mapview(n1)')
+  Hint: The 'mapview()'-function only needs the spatial object as an argument.
+  
+- Class: text
+  Output: Take a few moments to explore the map. Check out the pop-up windows of some points. On the left you can select different basemap layers.
+
+- Class: cmd_question
+  Output: Now reading in this (ESRI-) shapefile was pretty easy. Let us now do it the slightly harder way, reading in the same data, but from a .csv file. CSV stands for 'Comma Seperated Values' and is often used to store data tables. Create a new variable 'n2' and assign it the result from 'read.csv("nightclubs_zurich.csv")'.
+  CorrectAnswer: n2 <- read.csv("nightclubs_zurich.csv")
+  AnswerTests: omnitest(correctExpr='n2 <- read.csv("nightclubs_zurich.csv")')
+  Hint: To rad in the .csv, use n2 <- read.csv("nightclubs_zurich.csv"). Again, there is need to specify a path, because the table is stored in our working directory.
+  
+- Class: cmd_question
+  Output: Chek out the first few rows of 'n2' using the 'head()'-function.
+  CorrectAnswer: head(n2)
+  AnswerTests: omnitest(correctExpr='head(n2)')
+  Hint: Type head(n2).
+  
+- Class: text
+  Output: The header tells us there are 5 columns in this table. The first three store an ID or text information describing each point. The other two store point coordinates in terms of latitude and longitude in degrees.
 
 - Class: text
-  Output: 
+  Output: You can now turn your ordinary table into a spatial object with 'SpatialPointsDataFrame()'. The function needs (at least) two arguments - 1. coordinates in a 2-column data frame and 2. additional information for each feature.
 
-- Class: mult_question
-  Output: 
-  AnswerChoices: ANS;2;3
-  CorrectAnswer: ANS
-  AnswerTests: omnitest(correctVal= 'ANS')
-  Hint: hint
+- Class: cmd_question
+  Output: Create the new variable 'n3' with the command from above. You can specify the coordinates with either 'n2[,4:5]' or 'data.frame(n2$x, n2$y)'. As additional information just keep all of 'n2'.
+  CorrectAnswer: n3 <- SpatialPointsDataFrame(n2[,4:5], n2)
+  AnswerTests: any_of_exprs('n3 <- SpatialPointsDataFrame(n2[,4:5], n2)', 'n3 <- SpatialPointsDataFrame(data.frame(n2$x, n2$y), n2)')
+  Hint: You can use both options to achieve the same result - 'n3 <- SpatialPointsDataFrame(n2[,4:5], n2)' or 'n3 <- SpatialPointsDataFrame(data.frame(n2$x, n2$y), n2)'
+
+- Class: cmd_question
+  Output: Exectue 'n3' to see how your new object looks like. Can you spot a difference to 'n1', which you imported from the shapefile? If you need a second look, type 'play()', then 'n1' and finally 'nxt()' when you are done.
+  CorrectAnswer: n3
+  AnswerTests: omnitest(correctExpr='n3')
+  Hint: To get a quick look at some meta data of an object, just execute it in the console. No need for a specific command!
+  
+- Class: text
+  Output: Our 'n3'-object misses a spatial coordinate reference system (CRS). Why is this important? With no CRS defined, R or any GIS does not know where to locate the point coordinates. They need a spatial reference.
+  
+- Class: text
+  Output: The advantage of spatial data file types (like .shp or .tif) is, that they store such information. In this case we have to specify the CRS by hand. The 'crs()'-command can query AND set a CRS. Do not confuse it with the 'CRS()'-command from the 'sp'-package, written in upper-case letters. 
+
+- Class: cmd_question
+  Output: As discussed earlier, our point coordinates are in degree latitude and longitude. Set the CRS of 'n3' to the World Geodetic System (aka WGS84) with the following line -  crs(n3) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'
+  CorrectAnswer: crs(n3) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'
+  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
+  Hint: Copy, paste and execute the line above. The complicated expression right of the arrow should be in quotes.
+
+- Class: text
+  Output: In case this last step was not entirely clear to you - don't worry! All you need to know regarding CRS will be covered in another lesson.
+
+- Class: cmd_question
+  Output: Now your SpatialPointsDataFrame is spatially referenced and can be plotted. Use 'mapview()' again to plot 'n3'.
+  CorrectAnswer: mapview(n3)
+  AnswerTests: omnitest(correctExpr='mapview(n3)')
+  Hint: Like earlier, you can use mapview(n3) to view an interactive map with your point features.
+
+- Class: text
+  Output: After exploring your result in the map you will find no difference to the data set from before. They are identical, although they originated from two different file types (.shp and .csv).
+
+- Class: text
+  Output:  Finally, we want to export 'n3' to a shapefile, e.g. in order to use it in some GIS software. This can be realized with the 'writeOGR()'-function. We will need to specify 4 arguements - 1. 'obj' (the object to export), 2. 'dsn' (destination = target directory), 3. 'layer' (name of the file to be created WITHOUT extension), 4. 'driver' (target file type - sets the file extension).
+  
+- Class: cmd_question
+  Output: Apply the 'writeOGR'-function with the following arguments - obj=n3, dsn=getwd(), layer="nightclub_locations", driver="ESRI Shapefile"
+  CorrectAnswer: writeOGR(obj=n3, dsn=getwd(), layer="nightclub_locations", driver="ESRI Shapefile")
+  AnswerTests: omnitest(correctExpr='writeOGR(obj=n3, dsn=getwd(), layer="nightclub_locations", driver="ESRI Shapefile")')
+  Hint: Its okay if you did not make on the first try. Paste this - writeOGR(obj=n3, dsn=getwd(), layer="nightclub_locations", driver="ESRI Shapefile") - and try to comprehend what it does.
+
+- Class: text
+  Output: Congratulations! Now your not only imported and exported rasters, but also vector data. Additionally you learned about the structure of spatial objects in R. Keep upt the good work!

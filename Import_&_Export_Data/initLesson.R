@@ -5,7 +5,7 @@
 
 #rm(list=ls())
 
-list.of.packages <- c("raster", "rgdal")
+list.of.packages <- c("raster", "rgdal", "mapview")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 new.packages <- append(new.packages, list.of.packages[(list.of.packages %in% old.packages()[,"Package"])])
 if(length(new.packages)) install.packages(new.packages)
@@ -22,20 +22,29 @@ setwd(path)
 
 
 
-# delete .tif files created in earlier tries of this lesson
+# delete .tif files created in earlier trials of this lesson
 tifs <- list.files(pattern = '.tif')
 
 for (i in tifs){ 
   if (file.exists(i)==T){
     file.remove(i)
   }
-  
 }
+
+# delete nightclub_locations.shp created in earlier trials of this lesson
+locs <- list.files(pattern = 'location')
+
+for (i in locs){ 
+  if (file.exists(i)==T){
+    file.remove(i)
+  }
+}
+
 
 #if (dir.exists('results') == TRUE){
 #  unlink('results', recursive = T)
 #}
 #dir.create('results')
 
-#getwd()
+library(mapview)
 
