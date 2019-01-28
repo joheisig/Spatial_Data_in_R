@@ -10,10 +10,10 @@
   Output: Welcome to the third lesson in this course! This time we will learn how to import spatial data into R and how to export it once we are done with our analysis. 
 
 - Class: text
-  Output: In the first two lesson you learned, that geospatial data mainly comes in two forms - rasters and vectors. They store spatial information very different from each other. Let's start with raster data sets!
+  Output: In the first two lesson you learned, that geospatial data mainly comes in two forms - rasters and vectors. They store spatial information differently from each other. Let's start with raster data sets!
 
 - Class: text
-  Output: Before you can import, load or read in any data, you should know where it is located at. Typically you set your working directory to the folder containing the data, using the 'setwd()'command (wd = working directory). This saves you time and space when specifying file paths later. 
+  Output: Before you can import, load or read in any data, you should know where it is located at. Typically, you set your working directory to the folder containing the data, using the 'setwd()'-command (wd = working directory). This saves you time and space when specifying file paths later. 
 
 - Class: cmd_question
   Output: In preparation of this lesson the working directory was set for you. Find out where it is by using the 'getwd()'-function. 
@@ -32,7 +32,7 @@
 
 - Class: mult_question
   Output:  We can see a variety of files in different formats. Which of the following file extensions commonly marks a raster file?
-  AnswerChoices: .R, .yaml, .grd, .txt
+  AnswerChoices: .R; .yaml; .grd; .txt
   CorrectAnswer: .grd
   AnswerTests: omnitest(correctVal= '.grd')
   Hint: .R-, .yaml- and .txt files usually do not store spatial information. .grd stands for Gridded Data and can be used to store raster data.
@@ -74,7 +74,7 @@
   Hint: For the simple solution put "mount_rainier.grd" inside 'readGDAL()'. The advanced option is useful if you think about reusing this line. In a loop for example, where you read in many data sets, all that needs to change is the index number in [[brackets]]. In this case we list all .grd-files and take the first one to create our raster.
 
 - Class: cmd_question
-  Output: First, we want to inspect 'r1', which we created with the 'raster()'-function. Plot it quickly!
+  Output: First, we want to inspect 'r1', which we created with the 'raster()'-function. Plot it quickly! If you can not see the plot instantly, press Ctrl+6.
   CorrectAnswer: plot(r1)
   AnswerTests: omnitest(correctExpr='plot(r1)')
   Hint: Just type plot(r1).
@@ -107,7 +107,7 @@
   Output: Take a moment to explore the changes in the plot window, as well as in the console. How does the structure of 'r1' and 'r2' compare?
   
 - Class: text
-  Output: Although 'r2' comes from a .grd-raster-file, it is not considered a 'RasterLayer' in R but belongs to class 'SpatialGridDataFrame' from [package "sp"]. The structure of both objects differs, e.g. in slot numbers - 12 slots in 'r1' vs. 4 in 'r2'.
+  Output: Although 'r2' comes from a .grd-raster-file, it is not considered a 'RasterLayer' in R but belongs to the class 'SpatialGridDataFrame' from [package "sp"]. The structure of both objects differs, e.g. in slot numbers - 12 slots in 'r1' vs. 4 in 'r2'.
 
 - Class: text
   Output: Different classes also have different methods for the standard 'plot()'-function. As you can see in your plot window, the second plot has different colors, a larger legend and no axes lables. 
@@ -128,7 +128,7 @@
   Output: We will now export our product to the working directory. Even though it was a .grd file when we imported it, we will now change its format and write it as a GeoTIFF (.tif).
   
 - Class: cmd_question
-  Output: Use the 'writeRaster()'-function for the export. The first argument should be 'r1.feet'. The second one specifies the path and/or filename. In quotes, give your output a precise name and DO NOT FORGET the file extension (e.g. "mount_rainier_feet.tif""). As a third argument, add 'overwrite = TRUE', so old versions with the same name can get replaced by new ones.
+  Output: Use the 'writeRaster()'-function for the export. The first argument should be 'r1.feet'. The second one specifies the path and/or filename. In quotes, give your output a precise name and DO NOT FORGET the file extension (e.g. "mount_rainier_feet.tif"). As a third argument, add 'overwrite = TRUE', so old versions with the same name can get replaced by new ones.
   CorrectAnswer: writeRaster(r1.feet, "mount_rainier_feet.tif" , overwrite=TRUE)
   AnswerTests: omnitest(correctExpr='writeRaster(r1.feet, "mount_rainier_feet.tif" , overwrite=TRUE)')
   Hint: Writing a raster with 'writeRaster()' only requires two things - the R raster object and the filename of the export. But we will add a third argument, to avoid an error, in case the file already exists. This is useful, when you are experimenting with your analysis. For this excercise try 'writeRaster(r1.feet, "mount_rainier_feet.tif", overwrite=TRUE)'
@@ -148,7 +148,7 @@
 - Class: cmd_question
   Output: View 'str()' of 'n1' and make yourself familiar with its structure.
   CorrectAnswer: str(n1)
-  AnswerTests: omnitest(correctExpr='str(n1)'', correctVal=VAL')
+  AnswerTests: omnitest(correctExpr='str(n1)')
   Hint: Use str(n1) to get information on the structure of an object.
   
 - Class: mult_question
@@ -156,7 +156,7 @@
   AnswerChoices: SpatialPointsDataFrame;SpatialPoints;SpatialMultiPoints;Shapefile
   CorrectAnswer: SpatialPointsDataFrame
   AnswerTests: omnitest(correctVal= 'SpatialPointsDataFrame')
-  Hint: In R, it is not a shapefile anymore, but spatial points that are stored in a data frame.
+  Hint: In R, the file is not a shapefile anymore, but spatial points which are stored in a data frame.
 
 - Class: mult_question
   Output: How many point features are stored in this object?
@@ -175,7 +175,7 @@
   Output: Take a few moments to explore the map. Check out the pop-up windows of some points. On the left you can select different basemap layers.
 
 - Class: cmd_question
-  Output: Now reading in this (ESRI-) shapefile was pretty easy. Let us now do it the slightly harder way, reading in the same data, but from a .csv file. CSV stands for 'Comma Seperated Values' and is often used to store data tables. Create a new variable 'n2' and assign it the result from 'read.csv("nightclubs_zurich.csv")'.
+  Output: Now reading in this (ESRI-) shapefile was pretty easy. Let us now do it the slightly harder way, reading in the same data, but from a .csv file. CSV stands for 'Comma Seperated Values' and is often used to store data tables. Create a new variable 'n2' and assign to it the result of'read.csv("nightclubs_zurich.csv")'.
   CorrectAnswer: n2 <- read.csv("nightclubs_zurich.csv")
   AnswerTests: omnitest(correctExpr='n2 <- read.csv("nightclubs_zurich.csv")')
   Hint: To rad in the .csv, use n2 <- read.csv("nightclubs_zurich.csv"). Again, there is need to specify a path, because the table is stored in our working directory.
@@ -211,9 +211,9 @@
   Output: The advantage of spatial data file types (like .shp or .tif) is, that they store such information. In this case we have to specify the CRS by hand. The 'crs()'-command can query AND set a CRS. Do not confuse it with the 'CRS()'-command from the 'sp'-package, written in upper-case letters. 
 
 - Class: cmd_question
-  Output: As discussed earlier, our point coordinates are in degree latitude and longitude. Set the CRS of 'n3' to the World Geodetic System (aka WGS84) with the following line -  crs(n3) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'
-  CorrectAnswer: crs(n3) <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0'
-  AnswerTests: omnitest(correctExpr='EXPR', correctVal=VAL)
+  Output: As discussed earlier, our point coordinates are in degree latitude and longitude. Set the CRS of 'n3' to the World Geodetic System (aka WGS84) with the following line -  crs(n3) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+  CorrectAnswer: crs(n3) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+  AnswerTests: omnitest(correctExpr='crs(n3) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"')
   Hint: Copy, paste and execute the line above. The complicated expression right of the arrow should be in quotes.
 
 - Class: text

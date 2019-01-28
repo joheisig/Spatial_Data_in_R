@@ -5,10 +5,11 @@
 
 #rm(list=ls())
 
-list.of.packages <- c("raster", "rgdal", "mapview")
+list.of.packages <- c("raster", "rgdal", "mapview", "htmlwidgets")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if (as.numeric(substr(getNamespaceVersion('htmlwidgets'), 1,3))  < 1.3) new.packages <- append(new.packages, 'htmlwidgets')
 new.packages <- append(new.packages, list.of.packages[(list.of.packages %in% old.packages()[,"Package"])])
-if(length(new.packages)) install.packages(new.packages)
+if(length(new.packages)) install.packages(new.packages, quiet = TRUE)
 
 .get_course_path <- function(){
   tryCatch(swirl:::swirl_courses_dir(),
@@ -40,11 +41,6 @@ for (i in locs){
   }
 }
 
+try(library(mapview), silent = T)
 
-#if (dir.exists('results') == TRUE){
-#  unlink('results', recursive = T)
-#}
-#dir.create('results')
-
-library(mapview)
 
