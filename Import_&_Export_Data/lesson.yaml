@@ -32,7 +32,7 @@
 
 - Class: mult_question
   Output:  We can see a variety of files in different formats. Which of the following file extensions commonly marks a raster file?
-  AnswerChoices: .R; .yaml; .grd; .txt
+  AnswerChoices: .R; .yaml; .grd; .txt; .shp
   CorrectAnswer: .grd
   AnswerTests: omnitest(correctVal= '.grd')
   Hint: .R-, .yaml- and .txt files usually do not store spatial information. .grd stands for Gridded Data and can be used to store raster data.
@@ -40,7 +40,7 @@
 - Class: cmd_question
   Output: Imagine your working directory is full of data files with many different extensions. But you are only interested in one specific file type. Repeat the 'list.files()'-command from before, this time setting the 'pattern'-argument to ".grd$". This will filter your results.
   CorrectAnswer: list.files(pattern=".grd$")
-  AnswerTests: omnitest(correctExpr='list.files(pattern=".grd$")')
+  AnswerTests: any_of_expr('list.files(pattern=".grd$")', 'list.files(,".grd$")')
   Hint: We use list.files(pattern=".grd$") to filter the list of files. The $-sign makes sure, that there is no character after '.grd'. This avoids listing e.g. auxilary files like some_raster.grd.aux.xml.
   
 - Class: cmd_question
@@ -70,8 +70,8 @@
 - Class: cmd_question
   Output: We can also load a raster with the 'readGDAL()'-command. Try it by creating a new variable called 'r2' from the same data set as before. As a second option, instead of typing the file name ("mount_rainier.grd") you could also try using the 'list.files()'-expression from earlier. Because this returns a list, specify that you only want to use the first item - 'list.files(pattern=".grd$")[[1]]'
   CorrectAnswer: r2 <- readGDAL(list.files(pattern=".grd$")[[1]])
-  AnswerTests: any_of_exprs('r2 <- readGDAL("mount_rainier.grd")', 'r2 <- readGDAL(list.files(pattern=".grd$")[[1]])')
-  Hint: For the simple solution put "mount_rainier.grd" inside 'readGDAL()'. The advanced option is useful if you think about reusing this line. In a loop for example, where you read in many data sets, all that needs to change is the index number in [[brackets]]. In this case we list all .grd-files and take the first one to create our raster.
+  AnswerTests: any_of_exprs('r2 <- readGDAL("mount_rainier.grd")', 'r2 <- readGDAL(list.files(pattern=".grd$")[[1]])', 'r2 <- readGDAL(list.files(pattern=".grd$")[1])')
+  Hint: For the simple solution put "mount_rainier.grd" inside 'readGDAL()'. The advanced option is useful if you think about re-using this line. In a loop for example, where you read in many data sets, all that needs to change is the index number in [[brackets]]. In this case we list all .grd-files and take the first one to create our raster.
 
 - Class: cmd_question
   Output: First, we want to inspect 'r1', which we created with the 'raster()'-function. Plot it quickly! If you can not see the plot instantly, press Ctrl+6.
@@ -119,7 +119,7 @@
   Output: Convert elevation data from Mount Rainier from meters (current unit) to feet. 1 meter = 3.28084 feet. Create a new variable 'r1.feet' by multiplying 'r1' with the factor.
   CorrectAnswer: r1.feet <- r1 * 3.28084
   AnswerTests: omnitest(correctExpr='r1.feet <- r1 * 3.28084')
-  Hint: Create 'r1.feet' by assigning the product of 'r1' and 3.28084. the multiplication sign is * .
+  Hint: Create 'r1.feet' by assigning the product of 'r1' and 3.28084. The multiplication operator is * .
 
 - Class: text
   Output: If you now want to check the structure off 'r1.feet', you probably have many possibilites in mind. Here is a way of exploring without any R-commands - press Ctrl+8 to view your global environment and scroll to the 'r1.feet' drowp-down menu. See the min and max values in the @data slot?
@@ -130,7 +130,7 @@
 - Class: cmd_question
   Output: Use the 'writeRaster()'-function for the export. The first argument should be 'r1.feet'. The second one specifies the path and/or filename. In quotes, give your output a precise name and DO NOT FORGET the file extension (e.g. "mount_rainier_feet.tif"). As a third argument, add 'overwrite = TRUE', so old versions with the same name can get replaced by new ones.
   CorrectAnswer: writeRaster(r1.feet, "mount_rainier_feet.tif" , overwrite=TRUE)
-  AnswerTests: omnitest(correctExpr='writeRaster(r1.feet, "mount_rainier_feet.tif" , overwrite=TRUE)')
+  AnswerTests: test_writeRaster()
   Hint: Writing a raster with 'writeRaster()' only requires two things - the R raster object and the filename of the export. But we will add a third argument, to avoid an error, in case the file already exists. This is useful, when you are experimenting with your analysis. For this excercise try 'writeRaster(r1.feet, "mount_rainier_feet.tif", overwrite=TRUE)'
 
 - Class: text
@@ -142,7 +142,7 @@
 - Class: cmd_question
   Output: Use the 'readOGR()'-command to import the file 'nightclubs_zurich.shp'. Store this data in a new variable called 'n1'. Background fact - OGR stands for 'OpenGIS Simple Features Reference Implementation' and generally describes vector data in the open source GIS world.
   CorrectAnswer: n1 <- readOGR("nightclubs_zurich.shp")
-  AnswerTests: omnitest(correctExpr='n1 <- readOGR("nightclubs_zurich.shp")')
+  AnswerTests: test_read_shp()
   Hint: You can read in a shapefile like you did earlier with the raster. This time use 'readOGR()', not 'readGDAL()'. Create a new variable like this - n1 <- readOGR(...)
   
 - Class: cmd_question
@@ -177,7 +177,7 @@
 - Class: cmd_question
   Output: Now reading in this (ESRI-) shapefile was pretty easy. Let us now do it the slightly harder way, reading in the same data, but from a .csv file. CSV stands for 'Comma Seperated Values' and is often used to store data tables. Create a new variable 'n2' and assign to it the result of'read.csv("nightclubs_zurich.csv")'.
   CorrectAnswer: n2 <- read.csv("nightclubs_zurich.csv")
-  AnswerTests: omnitest(correctExpr='n2 <- read.csv("nightclubs_zurich.csv")')
+  AnswerTests: test_read_csv()
   Hint: To rad in the .csv, use n2 <- read.csv("nightclubs_zurich.csv"). Again, there is need to specify a path, because the table is stored in our working directory.
   
 - Class: cmd_question
@@ -195,17 +195,17 @@
 - Class: cmd_question
   Output: Create the new variable 'n3' with the command from above. You can specify the coordinates with either 'n2[,4:5]' or 'data.frame(n2$x, n2$y)'. As additional information just keep all of 'n2'.
   CorrectAnswer: n3 <- SpatialPointsDataFrame(n2[,4:5], n2)
-  AnswerTests: any_of_exprs('n3 <- SpatialPointsDataFrame(n2[,4:5], n2)', 'n3 <- SpatialPointsDataFrame(data.frame(n2$x, n2$y), n2)')
+  AnswerTests: test_SPDF()
   Hint: You can use both options to achieve the same result - 'n3 <- SpatialPointsDataFrame(n2[,4:5], n2)' or 'n3 <- SpatialPointsDataFrame(data.frame(n2$x, n2$y), n2)'
 
 - Class: cmd_question
-  Output: Exectue 'n3' to see how your new object looks like. Can you spot a difference to 'n1', which you imported from the shapefile? If you need a second look, type 'play()', then 'n1' and finally 'nxt()' when you are done.
-  CorrectAnswer: n3
-  AnswerTests: omnitest(correctExpr='n3')
-  Hint: To get a quick look at some meta data of an object, just execute it in the console. No need for a specific command!
+  Output: Get the 'summary()' of 'n3' to see how your new object looks like. Can you spot a difference to 'n1', which you imported from the shapefile? If you need a second look, type 'play()', then 'summary(n1)' and finally 'nxt()' when you are done.
+  CorrectAnswer: summary(n3)
+  AnswerTests: omnitest(correctExpr='summary(n3)')
+  Hint: To get a quick overview of an object, just call its summary in the console. The functions 'head()' and 'str()' are also helpful.
   
 - Class: text
-  Output: Our 'n3'-object misses a spatial coordinate reference system (CRS). Why is this important? With no CRS defined, R or any GIS does not know where to locate the point coordinates. They need a spatial reference.
+  Output: Our 'n3'-object misses a spatial coordinate reference system (CRS), expressed as proj4string. Why is this important? With no CRS defined, R or any GIS does not know where to locate the point coordinates. They need a spatial reference.
   
 - Class: text
   Output: The advantage of spatial data file types (like .shp or .tif) is, that they store such information. In this case we have to specify the CRS by hand. The 'crs()'-command can query AND set a CRS. Do not confuse it with the 'CRS()'-command from the 'sp'-package, written in upper-case letters. 
@@ -213,14 +213,14 @@
 - Class: cmd_question
   Output: As discussed earlier, our point coordinates are in degree latitude and longitude. Set the CRS of 'n3' to the World Geodetic System (aka WGS84) with the following line -  crs(n3) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
   CorrectAnswer: crs(n3) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-  AnswerTests: omnitest(correctExpr='crs(n3) <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"')
+  AnswerTests: test_crs()
   Hint: Copy, paste and execute the line above. The complicated expression right of the arrow should be in quotes.
 
 - Class: text
   Output: In case this last step was not entirely clear to you - don't worry! All you need to know regarding CRS will be covered in another lesson.
 
 - Class: cmd_question
-  Output: Now your SpatialPointsDataFrame is spatially referenced and can be plotted. Use 'mapview()' again to plot 'n3'.
+  Output: Now your SpatialPointsDataFrame is spatially referenced and can be plotted. Use 'mapview()' again to visualize 'n3'.
   CorrectAnswer: mapview(n3)
   AnswerTests: omnitest(correctExpr='mapview(n3)')
   Hint: Like earlier, you can use mapview(n3) to view an interactive map with your point features.
