@@ -35,12 +35,12 @@
   AnswerChoices: .R; .yaml; .grd; .txt; .shp
   CorrectAnswer: .grd
   AnswerTests: omnitest(correctVal= '.grd')
-  Hint: .R-, .yaml- and .txt files usually do not store spatial information. .grd stands for Gridded Data and can be used to store raster data.
+  Hint: .R-, .yaml- and .txt files usually do not store spatial information. .grd stands for Gridded Data and can be used to store raster data while shapefiles (.shp) store vector data.
 
 - Class: cmd_question
   Output: Imagine your working directory is full of data files with many different extensions. But you are only interested in one specific file type. Repeat the 'list.files()'-command from before, this time setting the 'pattern'-argument to ".grd$". This will filter your results.
   CorrectAnswer: list.files(pattern=".grd$")
-  AnswerTests: any_of_expr('list.files(pattern=".grd$")', 'list.files(,".grd$")')
+  AnswerTests: any_of_exprs('list.files(pattern=".grd$")', 'list.files(,".grd$")')
   Hint: We use list.files(pattern=".grd$") to filter the list of files. The $-sign makes sure, that there is no character after '.grd'. This avoids listing e.g. auxilary files like some_raster.grd.aux.xml.
   
 - Class: cmd_question
