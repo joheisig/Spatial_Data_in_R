@@ -71,7 +71,7 @@
   Output: We can also load a raster with the 'readGDAL()'-command. Try it by creating a new variable called 'r2' from the same data set as before. As a second option, instead of typing the file name ("mount_rainier.grd") you could also try using the 'list.files()'-expression from earlier. Because this returns a list, specify that you only want to use the first item - 'list.files(pattern=".grd$")[[1]]'
   CorrectAnswer: r2 <- readGDAL(list.files(pattern=".grd$")[[1]])
   AnswerTests: any_of_exprs('r2 <- readGDAL("mount_rainier.grd")', 'r2 <- readGDAL(list.files(pattern=".grd$")[[1]])', 'r2 <- readGDAL(list.files(pattern=".grd$")[1])')
-  Hint: For the simple solution put "mount_rainier.grd" inside 'readGDAL()'. The advanced option is useful if you think about re-using this line. In a loop for example, where you read in many data sets, all that needs to change is the index number in [[brackets]]. In this case we list all .grd-files and take the first one to create our raster.
+  Hint: For the simple solution put "mount_rainier.grd" inside 'readGDAL()'. The advanced option is useful if you think about re-using this line. In a loop for example, where you read in many data sets, all that needs to change is the index number in [[brackets]]. In this case we list all .grd-files and take the first one to create our raster. Make sure your variable is called 'r2'.
 
 - Class: cmd_question
   Output: First, we want to inspect 'r1', which we created with the 'raster()'-function. Plot it quickly! If you can not see the plot instantly, press Ctrl+6.
@@ -238,4 +238,4 @@
   Hint: Its okay if you did not make on the first try. Paste this - writeOGR(obj=n3, dsn=getwd(), layer="nightclub_locations", driver="ESRI Shapefile") - and try to comprehend what it does.
 
 - Class: text
-  Output: Congratulations! Now your not only imported and exported rasters, but also vector data. Additionally you learned about the structure of spatial objects in R. Keep upt the good work!
+  Output: Congratulations! Now your not only imported and exported rasters, but also vector data. Additionally you learned about the structure of spatial objects in R. Keep up the good work!

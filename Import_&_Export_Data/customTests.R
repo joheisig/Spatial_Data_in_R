@@ -34,12 +34,10 @@ test_writeRaster <- function(){
   try({
   for (i in tifs){   # search for all .tif files in wd and check if they meet requirements
     r <- raster(i)
-    info <- c(r@extent@xmin, r@extent@xmax, r@data@min, r@data@max)
-    
     t1 <- r@data@min > 3200
     t2 <- r@data@max > 14400
     t3 <- r@extent@xmin < 586300 & r@extent@xmax > 602400
-    tifs.test <- append(tifs.infos, all(t1,t2,t3))
+    tifs.test <- append(tifs.test, all(t1,t2,t3))
   }
 }, silent = TRUE)
   rm(i, tifs, r, t1, t2, t3)

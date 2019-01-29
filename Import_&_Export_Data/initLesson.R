@@ -42,5 +42,5 @@ for (i in locs){
 }
 
 try(library(mapview), silent = T)
-
+options(warn = -1)
 
