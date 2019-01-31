@@ -1,6 +1,6 @@
 # Spatial Data in R
 
-This is an interactive course on spatial data in R :globe_with_meridians:. It can be run inside e.g. RStudio with the [`swirl`](https://github.com/swirldev)-package 🌌. The project is in its development stage. Lessons listed below are already open for learning and testing.
+This is an interactive course on spatial data in R :globe_with_meridians:. It can be run inside e.g. RStudio with the [`swirl`](https://github.com/swirldev)-package 🌌. The project is in its development stage. Lessons listed below are already open for learning and testing. Suggestions are very welcome.
 
 ## Installation
 
@@ -21,5 +21,6 @@ swirl()
 ```
 
 ## Lessons
-* <b>Raster basics:</b> plot, crop and subset rasters, get basic meta data and stats 
-* <b>Vector basics:</b> explore point, line and polygon features, subset by attribute, create an overview map, calculate layer overlaps
+* <b>Raster Basics:</b> plot, crop and subset rasters, get basic meta data and stats 
+* <b>Vector Basics:</b> explore point, line and polygon features, subset by attribute, create an overview map, calculate intersections
+* <b>Import & Export: </b> read and write raster files, load shapefiles, import point features from csv, write shapefiles  
