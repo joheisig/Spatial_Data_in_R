@@ -1,0 +1,229 @@
+﻿- Class: meta
+  Course: Spatial Data in R
+  Lesson: Coordinate Reference Systems
+  Author: Johannes Heisig
+  Type: Standard
+  Organization: University of Bayreuth / UN-SPIDER
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to this lesson on Coordinate Reference Systems (or CRS)!
+
+- Class: text
+  Output: In the following you will learn a) why spatial data needs a reference, b) the difference between geographic and projected CRS, and c) how to get or change CRS information of an R-object.
+
+- Class: text
+  Output: In order to make calculations on spatial data sets, our computer needs to know exactly where to locate them. This enables it to e.g. determine whether a point is in- or outside a boundary or to extract information based on their location. So how can we let the machine know, where exactly our point or pixel is situated on the Earth's surface?
+
+- Class: text
+  Output: Imagine drawing a map by hand. It is quite hard to locate e.g. your home town on a blank sheet. But it gets way easier when the prime meridian, transecting through Greenwich (London), and the equator are already drawn. Or you have other longitudes and latitudes indicated with tick marks.
+
+- Class: text
+  Output: Spatial objects usually store their spatial extent / bounding box (in minimum and maximum of X and Y coordinates). 
+
+- Class: cmd_question
+  Output: Check out either the 'extent()'-function (raster package) or the 'bbox()'-function (sp package) to get the spatial extent of data set 'ny', which contains point locations in New York City.
+  CorrectAnswer: extent(ny)
+  AnswerTests: any_of_exprs('extent(ny)', 'bbox(ny)')
+  Hint: Careful, extent is not the same as extend!
+
+- Class: text
+  Output: These numbers yet do not give great insight on the location of the data set. In order to place the object on a blank map, R needs to know, to which point these coordinates are relative to. 
+
+- Class: text
+  Output: A CRS-object defines an ellipsoid (spherical approximation of the globe), a geodetic datum (spheriod, prime meridian, units) and a map projection (parameters to transform 3D-coordinates to a 2D-map-pane).
+
+- Class: cmd_question
+  Output: See how this information is stored by using 'crs(ny)'.
+  CorrectAnswer: crs(ny)
+  AnswerTests: omnitest(correctExpr='crs(ny)')
+  Hint: Type crs(ny) to see the CRS of ny.
+
+- Class: text
+  Output: Whenever we display 3D coordinates on a 2D map, there is a loss of information. Spatial objects experience distortions regarding their extents, distances or angles. This is mainly because our planet is not a perfect sphere, but more shaped like a dented snow ball. Therefore there are projections that fit certain areas of the world better than others.
+
+- Class: text
+  Output: Today there is a large number of location-specific CRSs. Even small countries or states have their own, optimized CRS to ensure highest accuracy for local data. But there are also CRSs that fit larger extents, like Europe, North America or the entire globe. 
+
+- Class: text
+  Output: CRSs can be geographic or projected. Geographic coordinate systems are expressed in degrees, minutes and seconds of latitude (90° South - 90° North) and longitude (180° West - 180° East). The Statue of Liberty for example has the following coordinates -  40° 41' 21.2892'' N, 74° 2' 40.2072'' W
+
+- Class: text
+  Output: While this seems like a detailed location information, it is complicated to derive the distance to e.g. Central Park at 40° 47' 6.3276'' N, 73° 58' 5.8260'' W. Especially because a degree at the equator is much wider than one close the the poles.
+
+- Class: text
+  Output: We can, however, translate the geographic coordinates to projected coordinates to get a metric version. It is much easier to perform calculations on 40.689247, -74.044502 (Statue of Liberty) and 40.785091, -73.968285 (Central Park).
+
+- Class: cmd_question
+  Output: To get an idea about the two point locations, try 'mapview(ny)'.
+  CorrectAnswer: mapview(ny)
+  AnswerTests: omnitest(correctExpr='mapview(ny)')
+  Hint: The 'ny'-variable is a SpatialPointsDataFrame, which stores point locations (x and Y), CRS information and a name for each point. That's all 'mapview()' needs to it on an interactive map pane.
+
+- Class: cmd_question
+  Output: We stored these two points in seperate variables called 'sl' and 'cp'. Type 'spDists(sl, cp)' to calculate the distance between them (in kilometers).
+  CorrectAnswer: spDists(sl, cp)
+  AnswerTests: any_of_exprs('spDists(sl, cp)', 'spDists(cp, sl)')
+  Hint: Just use spDists(sl, cp) to derive the distance in km. Remember you can always consult the documentation in the help tab (Ctrl+3) to look up functions!
+
+- Class: text
+  Output: The most common projected CRS is the World Geographic System from 1984 (WGS84) which is suitable for global data sets. Services like Google Earth use it for instance. 
+
+- Class: text
+  Output: Another common example is the North American Datum 1983 (NAD83), that is used by US Federal Agencies. Parameters are optimized for North America, so locations have a sufficient accuracy. If we used this CRS for data in other parts of the world deviation of locations are quite likely. 
+
+- Class: text
+  Output: Let's explore the differences between a few CRS - we will plot the boundary of Australia in three projections - 1) in the global WGS84, 2) in the Australia-specific GDA94 and 3) in the Switzerland-specific CH1903. 
+
+- Class: cmd_question
+  Output: First plot the standard WGS84 version, which we prepared for you. It is called 'oz.wgs'
+  CorrectAnswer: plot(oz.wgs)
+  AnswerTests: omnitest(correctExpr='plot(oz.wgs)')
+  Hint: Call plot() on oz.wgs, to get a quick display of the Australian boundary.
+
+- Class: cmd_question
+  Output: Now try 'oz.gda'. Its CRS is adjusted to fit the Australian continent. Set the 'col'-argument to 'blue', to tell them apart.
+  CorrectAnswer: plot(oz.gda, col="blue")
+  AnswerTests: omnitest(correctExpr='plot(oz.gda, col="blue")')
+  Hint: Call plot(oz.gda, col='blue') to get a quick display of the Australian boundary in the GDA83 CRS.
+
+- Class: text
+  Output: Differences between the two might not be obvious, but if you click the arrows on your plot window to switch back and forth, you will notice a slight displacement. 
+
+- Class: cmd_question
+  Output: Finally, try 'oz.ch', which uses a CRS optimized for Switzerland. Color it 'red'.
+  CorrectAnswer: plot(oz.ch, col="red")
+  AnswerTests: omnitest(correctExpr='plot(oz.ch, col="red")')
+  Hint: hint is missing
+
+- Class: text
+  Output: Looks a bit uncomfortable, right? The Swiss CRS works well in its designated area, but map distortion and inaccuracy grow with distance. That's why choosing the right CRS and reprojecting is crucial when working with spatial data!
+
+- Class: cmd_question
+  Output: Let's look at another case, where CRS information is important - combining spatial data sets. Once again, plot the plain boundary of Australia in GDA94.
+  CorrectAnswer: plot(oz.gda)
+  AnswerTests: omnitest(correctExpr='plot(oz.gda)')
+  Hint: hint is missing
+
+- Class: cmd_question
+  Output:  Now we can overlay a few point locations of Australia's major cities. Use 'points()' to add 'oz.cities'.
+  CorrectAnswer: points(oz.cities)
+  AnswerTests: omnitest(correctExpr='points(oz.cities)')
+  Hint: Use points(oz.cities) to add point locations to the existing plot.
+
+- Class: text
+  Output: What happened? Points do not appear on the map. R executed the 'points()'-command with no error. That must mean they have been plotted, but we can not see them. 
+
+- Class: cmd_question
+  Output: Check the CRS information for both layers. Start with 'crs(oz.gda)'...
+  CorrectAnswer: crs(oz.gda)
+  AnswerTests: omnitest(correctExpr='crs(oz.gda)')
+  Hint: The CRS information is usually stored in a slot inside a spatial object. Functions like crs() can access this information. Here, use crs(oz.gda).
+
+- Class: cmd_question
+  Output: Now try the same with 'oz.cities'.
+  CorrectAnswer: crs(oz.cities)
+  AnswerTests: omnitest(correctExpr='crs(oz.cities)')
+  Hint: To avoid typing and errors, press the UP-arrow and exchange oz.gda with oz.cities.
+
+- Class: text
+  Output: You just displayed CRS information of both data sets in the proj4string format. This is basically plain text, where each item begins with a +. It includes all the necessary parts of a CRS-object - projection, ellipsoid, datum and a 3-dimensional displacement-vector from the WGS84-origin.
+
+- Class: text
+  Output: Compare the two proj4strings. Here lies our problem. CRS-information of the layers are not matching. Hence, the second data set to be plotted ends up in a faulty location. 
+
+- Class: text
+  Output: Let's fix it by reprojecting the point data from WGS84 to the Australian GDA94. We will use 'spTransform()' to do so. The first argument is the data to be reprojected ('oz.cities'). 
+
+- Class: text
+  Output: The second is the desired CRSobject, which we can obtain in multiple ways. 1) We can create it manually by using the proj4string (describing the CRS in text format) with this line - CRS("+proj=lcc +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"). This works, but is prone to errors due to copying and pasting. 
+
+- Class: text
+  Output: 2) like earlier, use 'crs(oz.gda)' to pull the information from a spatial object, or...
+
+- Class: text
+  Output: 3) address the slot directly in a spatial object using @ (e.g. 'oz.gda@proj4string')
+
+- Class: cmd_question
+  Output: Now reproject the 'oz.cities'-data with 'spTransform()' using one of these three methods. Store the result in 'oz.cities.gda'.
+  CorrectAnswer: oz.cities.gda <- spTransform(oz.cities, crs(oz.gda))
+  AnswerTests: any_of_exprs('oz.cities.gda <- spTransform(oz.cities, crs(oz.gda))', 'oz.cities.gda <- spTransform(oz.cities, oz.gda@proj4string)','oz.cities.gda <- spTransform(oz.cities,CRS("+proj=lcc +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))')
+  Hint: Remember you can always consult the documentation in the help tab (Ctrl+3) to look up functions!
+
+- Class: cmd_question
+  Output: Great! Now let's see if this did the job. Try 'points()' again, this time with the reprojected data. Do they appear in the right location now?
+  CorrectAnswer: points(oz.cities.gda)
+  AnswerTests: omnitest(correctExpr='points(oz.cities.gda)')
+  Hint: Use the 'points()'-function like you did before. It takes X and Y values from the 'sp'-object and puts them on top of the existing plot. We changed the default settings secretly so points appear with a red fill.
+
+- Class: text
+  Output: This looks better! Keep in mind to check the CRS before plotting when using multiple data sets.
+
+- Class: text
+  Output: We just transformed our data from one CRS to another. Sometimes, however, you create or import spatial data in R, that is missing a CRS ('crs(x)' results in 'NA'). In this case you would have to define the CRS, which you have to know previously. This can be achived by assigning a CRS-object to the corresponding slot of your spatial R-object - 'proj4string(x) <- CRS("some proj4string")'.
+
+- Class: text
+  Output: So far in this lesson we only covered 'sp' classes (or vector data). Querying, assigning or changing CRS information of raster objects works the same way. Only difference is, that some corresponding functions have different names and come from different packages.
+
+- Class: cmd_question
+  Output: Plot our example raster data 'mt_rainier' to see what you are dealing with
+  CorrectAnswer: plot(mt_rainier)
+  AnswerTests: omnitest(correctExpr='plot(mt_rainier)')
+  Hint: Use projection(mt_rainier) to derive the CRS information of our example raster object.
+
+
+- Class: cmd_question
+  Output: The 'projection()'-function from the 'raster'-package is the equivalent to 'proj4string()' from 'sp' and lets you derive the CRS information. Try it with the 'mt_rainier' data set, which is already loaded for you. 
+  CorrectAnswer: projection(mt_rainier)
+  AnswerTests: omnitest(correctExpr='projection(mt_rainier)')
+  Hint: Use projection(mt_rainier) to derive the CRS information of our example raster object.
+
+- Class: text
+  Output: This function can also be used to define a CRS with the assigning arrow - 'projection(mt_rainier) <- CRS("some proj4string")'.
+
+- Class: text
+  Output: Transforming raster data from one CRS to another can be done with 'projectRaster()'. The first argument is the raster layer (or stack or brick) to be projected. The 'to'-argument can be a different raster object, whose parameters should serve as a role model. Alternatively, one can specify the 'crs'-argument using a CRS-object, like we did earlier in 'spTransform()'. 
+
+- Class: cmd_question
+  Output: As we do not have a role model data set right now, we will transform the data from its current WGS84 UTM zone to a version of NAD83, that fits southern Washington State. Type 'NAD83' to display a string, that contains CRS information we prepared for you.
+  CorrectAnswer: NAD83
+  AnswerTests: omnitest(correctExpr='NAD83')
+  Hint: Just type NAD83 and execute it.
+
+- Class: text
+  Output: Comparing the both CRSs, we can observe that they differ in projection and ellipsoid, but share the same origin ('+towgs84' is 0).
+
+- Class: cmd_question
+  Output: To transform the raster now, use 'projectRaster()', as introduced above. The 'crs'-argument should be a CRS object built from the 'NAD83'-string. Store the result in 'mt_rainier_NAD83'.
+  CorrectAnswer: mt_rainier_NAD83 <- projectRaster(mt_rainier, crs = CRS(NAD83))
+  AnswerTests: omnitest(correctExpr='mt_rainier_NAD83 <- projectRaster(mt_rainier, crs = CRS(NAD83))')
+  Hint: This operation again requires two steps in one line. The major process is reprojecting the mt_rainier data. Inside this process, a CRS object is created with 'CRS(NAD83)', which the 'crs'-argument of 'projectRaster()' is assigned to. Nesting the two into each other looks like this - projectRaster(mt_rainier, crs = CRS(NAD83))
+
+- Class: cmd_question
+  Output: Well done! Again, see what changed by plotting your resulting data set. 
+  CorrectAnswer: plot(mt_rainier_NAD83)
+  AnswerTests: omnitest(correctExpr='plot(mt_rainier_NAD83)')
+  Hint: Use plot(mt_rainier_NAD83) to see your result.
+
+- Class: text
+  Output: Notice the tilt and the differing coordinate frame?
+
+- Class: text
+  Output: Great work powering through this theoretical and complex topic. Getting to know the concept of CRSs can be exhausting, but but can save you time and frustration in the long run. Make sure to always be aware of your data's CRS, especially when undertaking spatial analysis and multi-layer calculations!
+
+- Class: text
+  Output: To wrap up this lesson, test your knowledge about CRSs with the following few questions...
+
+- Class: mult_question
+  Output: You have a number of spatial data sets, located in different parts of the world. For further analyis you need to choose a suitable CRS, that minimizes overall distortions. What's your pick?
+  AnswerChoices: WGS84;GAD83;ETRS89;NAD83;NAD27
+  CorrectAnswer: WGS84
+  AnswerTests: omnitest(correctVal='WGS84')
+  Hint: ETRS, GAD and NAD are CRS optimized for continents (Europe, Australia and North America).
+
+- Class: mult_question
+  Output: x is a 'sp'-object, that contains the boundary of some country. Which of these expressions does NOT fetch the CRS information?
+  AnswerChoices: crs(x);CRS(x);proj4string(x);x@proj4string
+  CorrectAnswer: CRS(x)
+  AnswerTests: omnitest(correctVal='CRS(x)')
+  Hint: CRS(x) and crs(x) are not the same! One fetches the CRS information, the other creates a CRS object.
